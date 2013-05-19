@@ -25,15 +25,10 @@ class Model_Project extends \Orm\Model
 
 	public static function init($params)
 	{
-		if($params['name'] == '')
-		{
+		if($params['name'] == ''){
 			throw new Model_ProjectException("Project name cannot be blank");
 		}
-
-		$is_existing_project = (bool)self::find()->where('name', '=', $params['name'])->count();
-
-		if($is_existing_project)
-		{
+		if(self::is_existing_project($params['name'])){
 			throw new Model_ProjectException("Project '".$params['name']."' already exists");
 		}
 
@@ -44,8 +39,18 @@ class Model_Project extends \Orm\Model
 		return $project;
 	}
 
+	private static function is_existing_project($name)
+	{
+		return (bool)self::find()->where('name', '=', $name)->count();
+	}
+
 	public static function get_by_id($id)
 	{
 		return self::find()->where('id', '=', $id)->get_one();
+	}
+
+	public static function get_all()
+	{
+		return self::find()->get();
 	}
 }

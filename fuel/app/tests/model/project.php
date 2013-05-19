@@ -5,7 +5,6 @@
  */
 class Tests_Project extends \Fuel\Core\TestCase 
 {
-
 	public function setUp()
 	{
 		Model_Project::find()->delete();
@@ -54,5 +53,23 @@ class Tests_Project extends \Fuel\Core\TestCase
 		$project_same_name = Model_Project::init(array(
 			'name' => 'Project name'
 		));
+	}
+
+	public function test_get_all()
+	{
+		$project = Model_Project::init(array(
+			'name' => 'Project name'
+		));
+		$project2 = Model_Project::init(array(
+			'name' => 'Project name2'
+		));
+
+		$projects = Model_Project::get_all();
+		$first = current($projects);
+		$second = next($projects);
+
+		$this->assertEquals(2, count($projects));
+		$this->assertEquals('Project name', $first->name);
+		$this->assertEquals('Project name2', $second->name);
 	}
 }
