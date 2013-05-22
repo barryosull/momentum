@@ -56,7 +56,7 @@ class Model_PeriodOfTime extends \Orm\Model
 		return self::find()->where('id', '=', $id)->get_one();
 	}
 
-	public static function get_all_for_date(DateTime $date)
+	public static function get_all_by_date(DateTime $date)
 	{
 		$timestamp = $date->getTimestamp();
 		$day_after_timestamp = $timestamp + 86400;

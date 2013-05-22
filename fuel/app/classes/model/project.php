@@ -23,6 +23,8 @@ class Model_Project extends \Orm\Model
 	);
 	protected static $_table_name = 'projects';
 
+	protected static $_has_many = array('periodoftime');
+
 	public static function init($params)
 	{
 		if($params['name'] == ''){

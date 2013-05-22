@@ -86,25 +86,26 @@ class Tests_PeriodOfTime extends \Fuel\Core\TestCase
 		));
 	}
 
-	public function test_get_all_for_date()
+	public function test_get_all_by_date()
 	{
-		$date = new DateTime();
+		$datetime = new DateTime();
+		$date = new DateTime($datetime->format('Y-m-d'));
 
-		$times = Model_PeriodOfTime::get_all_for_date($date);
+		$times = Model_PeriodOfTime::get_all_by_date($date);
 		$this->assertEquals(0, count($times));
 		
 		$time = Model_PeriodOfTime::init(array(
 			'project' => $this->project,
 			'minutes' => 10
 		));
-		$times = Model_PeriodOfTime::get_all_for_date($date);
+		$times = Model_PeriodOfTime::get_all_by_date($date);
 		$this->assertEquals(1, count($times));
 
 		$time = Model_PeriodOfTime::init(array(
 			'project' => $this->project,
 			'minutes' => 10
 		));
-		$times = Model_PeriodOfTime::get_all_for_date($date);
+		$times = Model_PeriodOfTime::get_all_by_date($date);
 		$this->assertEquals(2, count($times));
 	}
 }
