@@ -63,20 +63,14 @@ class Model_User extends \Orm\Model
 		}
 	}
 
-	private static function create_user($params)
+	private static function is_existing_user($email)
 	{
-		//$params['group'] = 1;
-		//$params['profile_fields'] = '{}';
-
-		Auth::create_user(
-			$params['email'], 
-			$params['password']
-		);
-
-		$user = self::get_user_by_email($params['email']);
-
-		$user['name'] = $params['name'];
-		$user->save();
+		$user = self::get_user_by_email($email);
+			
+		if($user){
+			return true;
+		}
+		return false;
 	}
 
 	private static function get_user_by_email($email)
@@ -86,16 +80,19 @@ class Model_User extends \Orm\Model
 			->get_one();
 	}
 
-	private static function is_existing_user($email)
+	private static function create_user($params)
 	{
-		$user = self::find()
-			->where('email', '=', $params['email'])
-			->get_one();
+		Auth::create_user(
+			$params['email'], 
+			$params['password']
+		);
 
-		if($user){
-			return true;
-		}
-		return false;
+		$user = self::get_user_by_email($params['email']);
+
+		$user['name'] = $params['name'];
+		$user->save();
+
+		return $user;
 	}
 
 	public static function login($params)
@@ -114,7 +111,7 @@ class Model_User extends \Orm\Model
 	{
 		$user = self::get_user_by_email(Auth::get_screen_name());
 	
-		if($user){
+		if(!$user){
 			throw new Model_UserLoginException('No logged in user');
 		}
 		return $user;
