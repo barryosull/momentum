@@ -11,6 +11,10 @@ class Model_Project extends \Orm\Model
 		'updated_at',
 	);
 
+	protected static $_belongs_to = array(
+		'member'
+	);	
+
 	protected static $_observers = array(
 		'Orm\Observer_CreatedAt' => array(
 			'events' => array('before_insert'),
