@@ -35,9 +35,13 @@ class Model_User extends \Orm\Model
 
 	public static function init($params)
 	{
-		$params['group'] = 1;
-		$params['profile_fields'] = '{}';
+		self::check_params($params);
+	
+		return self::create_user($params);
+	}
 
+	private static function check_params($params)
+	{
 		if($params['name'] == '')
 		{
 			throw new Model_UserNameException('Name cannot be blank');
@@ -54,28 +58,44 @@ class Model_User extends \Orm\Model
 		{
 			throw new Model_UserPasswordException('Passwords are not the same');
 		}
-
-		$user = self::find()
-			->where('email', '=', $params['email'])
-			->get_one();
-
-		if($user){
+		if(self::is_existing_user($params['email'])){
 			throw new Model_UserEmailException("Email '".$params['email']."' is already registered");
 		}
+	}
+
+	private static function create_user($params)
+	{
+		//$params['group'] = 1;
+		//$params['profile_fields'] = '{}';
 
 		Auth::create_user(
 			$params['email'], 
 			$params['password']
 		);
 
+		$user = self::get_user_by_email($params['email']);
+
+		$user['name'] = $params['name'];
+		$user->save();
+	}
+
+	private static function get_user_by_email($email)
+	{
+		return self::find()
+			->where('email', '=', $email)
+			->get_one();
+	}
+
+	private static function is_existing_user($email)
+	{
 		$user = self::find()
 			->where('email', '=', $params['email'])
 			->get_one();
 
-		$user['name'] = $params['name'];
-		$user->save();
-
-		return $user;
+		if($user){
+			return true;
+		}
+		return false;
 	}
 
 	public static function login($params)
@@ -92,12 +112,11 @@ class Model_User extends \Orm\Model
 
 	public static function get_logged_in_user()
 	{
-		$user_query = self::find()
-			->where('email', '=', Auth::get_screen_name());
-
-		if($user_query->count() == 0){
+		$user = self::get_user_by_email(Auth::get_screen_name());
+	
+		if($user){
 			throw new Model_UserLoginException('No logged in user');
 		}
-		return $user_query->get_one();
+		return $user;
 	}
 }
