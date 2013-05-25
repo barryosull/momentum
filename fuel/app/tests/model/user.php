@@ -33,11 +33,11 @@ class Tests_User extends \Fuel\Core\TestCase
 		));
 
 		Model_User::login(array(
-			'email'=>'barry',
+			'email'=>'email',
 			'password'=>'password'
 		));
 
-		$user_again = Model_User::get_loggedin_user();
+		$user_again = Model_User::get_logged_in_user();
 
 		$this->assertEquals(
 			$user->id,
@@ -49,10 +49,29 @@ class Tests_User extends \Fuel\Core\TestCase
 	 * @expectedException Model_UserLoginException
 	 * @expectedExceptionMessage Invalid Email/Password combination
 	 */
-	public function test_bad_login_fails()
+	public function test_bad_login_for_nonexistant_user()
 	{
 		Model_User::login(array(
-			'email'=>'barry',
+			'email'=>'does_not_exist',
+			'password'=>'password'
+		));
+	}
+
+	/**
+	 * @expectedException Model_UserLoginException
+	 * @expectedExceptionMessage Invalid Email/Password combination
+	 */
+	public function test_bad_login_for_existing_user()
+	{
+		$user = Model_User::init(array(
+			'name' => 'Barry',
+			'email' => 'email',
+			'password' => 'password',
+			'password_confirm' => 'password',
+		));
+
+		Model_User::login(array(
+			'email'=>'wrong_email',
 			'password'=>'password'
 		));
 	}
@@ -63,7 +82,7 @@ class Tests_User extends \Fuel\Core\TestCase
 	 */
 	public function test_get_loggedin_user_fails_when_no_user()
 	{
-		Model_User::get_loggedin_user();
+		Model_User::get_logged_in_user();
 	}
 
 	/**
