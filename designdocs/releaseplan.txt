@@ -1,0 +1,18 @@
+Release plan for Momentum
+
+Each release will have it's own DB on the server. 
+It will copy over the DB from the previous release, so that it feels like the system is evolving.
+Each release will have its own subdomain, e.g. alpha.momentu.me, v1.momentu.me
+
+Release 1: Alpha
+Improved replica of the Google Docs version
+
+Release 2: v1
+Multi-user, charts, prettier and responsive for mobile devices
+
+Release 3: v2
+Easier interface for switching between projects
+
+Release 4: v3
+New features based of user interactions (pending)
+

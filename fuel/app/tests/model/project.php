@@ -44,7 +44,7 @@ class Tests_Project extends \Fuel\Core\TestCase
 	/**
 	 * @expectedException Model_ProjectException
 	 */
-	public function test_cant_have_duplicate_tests()
+	public function test_cant_have_duplicate_project_names()
 	{
 		$project = Model_Project::init(array(
 			'name' => 'Project name'

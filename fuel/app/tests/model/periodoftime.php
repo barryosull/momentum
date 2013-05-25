@@ -35,8 +35,8 @@ class Tests_PeriodOfTime extends \Fuel\Core\TestCase
 			$time_again->minutes
 		);
 		$this->assertEquals(
-			$time->minutes,
-			$time_again->minutes
+			$time->project,
+			$time_again->project
 		);
 	}
 
