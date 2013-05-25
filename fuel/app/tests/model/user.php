@@ -14,26 +14,26 @@ class Tests_User extends \Fuel\Core\TestCase
 	{
 		$user = Model_User::init(array(
 			'name' => 'Barry',
-			'email' => 'email',
+			'email' => 'email@email.com',
 			'password' => 'password',
 			'password_confirm' => 'password',
 		));
 
 		$this->assertEquals('Barry', $user->name);
-		$this->assertEquals('email', $user->email);
+		$this->assertEquals('email@email.com', $user->email);
 	}
 
 	public function test_user_can_login()
 	{
 		$user = Model_User::init(array(
 			'name' => 'Barry',
-			'email' => 'email',
+			'email' => 'email@email.com',
 			'password' => 'password',
 			'password_confirm' => 'password',
 		));
 
 		Model_User::login(array(
-			'email'=>'email',
+			'email'=>'email@email.com',
 			'password'=>'password'
 		));
 
@@ -65,7 +65,7 @@ class Tests_User extends \Fuel\Core\TestCase
 	{
 		$user = Model_User::init(array(
 			'name' => 'Barry',
-			'email' => 'email',
+			'email' => 'email@email.com',
 			'password' => 'password',
 			'password_confirm' => 'password',
 		));
@@ -92,15 +92,8 @@ class Tests_User extends \Fuel\Core\TestCase
 	public function test_name_cannot_be_blank()
 	{
 		$user = Model_User::init(array(
-			'name' => 'Barry',
-			'email' => 'email',
-			'password' => 'password',
-			'password_confirm' => 'password',
-		));
-
-		$user = Model_User::init(array(
-			'name' => 'Barry2',
-			'email' => 'email',
+			'name' => '',
+			'email' => 'email@email.com',
 			'password' => 'password',
 			'password_confirm' => 'password',
 		));
@@ -109,20 +102,20 @@ class Tests_User extends \Fuel\Core\TestCase
 
 	/**
 	 * @expectedException Model_UserEmailException
-	 * @expectedExceptionMessage Email 'email' is already registered
+	 * @expectedExceptionMessage Email 'email@email.com' is already registered
 	 */
 	public function test_email_must_be_unqiue()
 	{
 		$user = Model_User::init(array(
 			'name' => 'Barry',
-			'email' => 'email',
+			'email' => 'email@email.com',
 			'password' => 'password',
 			'password_confirm' => 'password',
 		));
 
 		$user = Model_User::init(array(
 			'name' => 'Barry2',
-			'email' => 'email',
+			'email' => 'email@email.com',
 			'password' => 'password',
 			'password_confirm' => 'password',
 		));
@@ -150,7 +143,7 @@ class Tests_User extends \Fuel\Core\TestCase
 	{
 		$user = Model_User::init(array(
 			'name' => 'Barry',
-			'email' => 'email',
+			'email' => 'email@email.com',
 			'password' => '',
 			'password_confirm' => '',
 		));
@@ -164,7 +157,7 @@ class Tests_User extends \Fuel\Core\TestCase
 	{
 		$user = Model_User::init(array(
 			'name' => 'Barry',
-			'email' => 'email',
+			'email' => 'email@email.com',
 			'password' => 'password',
 			'password_confirm' => 'not same password',
 		));
