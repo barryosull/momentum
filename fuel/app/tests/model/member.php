@@ -68,7 +68,7 @@ class Tests_Member extends \Fuel\Core\TestCase
 		$this->member->add_project($project);
 		$this->member->add_project($project);
 	}
-	/*
+	
 	public function test_get_all_projects_is_initially_empty()
 	{
 		$projects = $this->member->get_all_projects();
@@ -76,7 +76,7 @@ class Tests_Member extends \Fuel\Core\TestCase
 		$this->assertEquals(0, count($projects));
 	}
 
-	public function test_get_all_projects_returns_projects()
+	public function test_get_all_projects_returns_array_of_projects()
 	{
 		$project = Model_Project::init(array(
 			'name'=>'project'
@@ -88,6 +88,7 @@ class Tests_Member extends \Fuel\Core\TestCase
 		$project_again = current($projects);
 		$this->assertEquals($project, $project_again);
 	}
+
 
 	public function test_get_all_projects_returns_all()
 	{
@@ -108,12 +109,12 @@ class Tests_Member extends \Fuel\Core\TestCase
 	/**
 	 * @expectedException Model_MemberMissingParamException
 	 * @expectedExceptionMessage Model_PeriodOfTime param is missing
-	 
+	 */
 	public function test_add_period_of_time_requires_proper_model()
 	{
-		$this->member->add_period_of_time(array());
+		$this->member->add_period_of_time(new DateTime());
 	}
-
+	
 	public function test_get_all_period_of_time_by_date_returns_period_of_time()
 	{
 		$project = Model_Project::init(array(
@@ -133,5 +134,4 @@ class Tests_Member extends \Fuel\Core\TestCase
 		$time_again = current($times);
 		$this->assertEquals($time, $time_again);
 	}
-	*/
 }

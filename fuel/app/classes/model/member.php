@@ -2,6 +2,7 @@
 
 class Model_MemberException extends Exception {}
 class Model_MemberProjectException extends Model_MemberException {}
+class Model_MemberMissingParamException extends Model_MemberException {}
 
 class Model_Member extends \Orm\Model
 {
@@ -63,5 +64,34 @@ class Model_Member extends \Orm\Model
 		}
 		$this->project[] = $project;
 		$this->save();
+	}
+
+	public function get_all_projects()
+	{
+		return $this->project;
+	}
+
+	public function add_period_of_time($time=array())
+	{
+		if(get_class($time) != 'Model_PeriodOfTime'){
+
+			throw new Model_MemberMissingParamException('Model_PeriodOfTime param is missing');
+		}
+		$this->periodoftime[] = $time;
+		$this->save();
+	}
+
+	public function get_all_period_of_time_by_date(DateTime $date)
+	{
+		$timestamp = $date->getTimestamp();
+		$day_after_timestamp = $timestamp + 86400;
+		
+		$times = Model_PeriodOfTime::find()
+					->where('member_id', $this->id)
+					->where('created_at', '>=', $timestamp)
+					->where('created_at', '<', $day_after_timestamp)
+					->get();	
+
+		return $times;
 	}
 }

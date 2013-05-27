@@ -8,6 +8,7 @@ class Model_PeriodOfTime extends \Orm\Model
 	protected static $_properties = array(
 		'id',
 		'project_id',
+		'member_id',
 		'minutes',
 		'created_at',
 		'updated_at',
@@ -48,6 +49,7 @@ class Model_PeriodOfTime extends \Orm\Model
 		
 		$time = self::forge($params);
 		$time->project_id = $project->id;
+		$time->member_id = 0;
 
 		$time->save();
 
