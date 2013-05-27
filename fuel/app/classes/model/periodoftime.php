@@ -33,24 +33,28 @@ class Model_PeriodOfTime extends \Orm\Model
 
 	public static function init($params)
 	{
+		self::check_init_params($params);		
+		return self::create_time($params);
+	}
+
+	private static function check_init_params($params)
+	{
 		if(!isset($params['project'])){
 			throw new Model_PeriodOfTimeException("Project field is required, it must be of type Model_Project");
 		}
-
-		$project = $params['project'];
-
-		if(get_class($project) != 'Model_Project'){
+		if(get_class($params['project']) != 'Model_Project'){
 			throw new Model_PeriodOfTimeException("Project field is required, it must be of type Model_Project");
 		}
-
 		if((int)$params['minutes'] < 1){
 			throw new Model_PeriodOfTimeException("Minutes field must be greater than 0, '".(int)$params['minutes']."' was entered");
 		}
-		
-		$time = self::forge($params);
-		$time->project_id = $project->id;
-		$time->member_id = 0;
+	}
 
+	private static function create_time($params)
+	{
+		$time = self::forge($params);
+		$time->project_id = $params['project']->id;
+		$time->member_id = 0;
 		$time->save();
 
 		return $time;

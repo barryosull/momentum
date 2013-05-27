@@ -39,12 +39,12 @@ class Model_User extends \Orm\Model
 
 	public static function init($params)
 	{
-		self::check_params($params);
+		self::check_init_params($params);
 	
 		return self::create_user($params);
 	}
 
-	private static function check_params($params)
+	private static function check_init_params($params)
 	{
 		if($params['name'] == '')
 		{
