@@ -3,6 +3,7 @@
 class Model_UserException extends Exception {}
 
 class Model_UserLoginException extends Model_UserException {}
+class Model_UserLogoutException extends Model_UserException {}
 class Model_UserNameException extends Model_UserException {}
 class Model_UserEmailException extends Model_UserException {}
 class Model_UserPasswordException extends Model_UserException {}
@@ -119,5 +120,13 @@ class Model_User extends \Orm\Model
 			throw new Model_UserLoginException('No logged in user');
 		}
 		return $user;
+	}
+
+	public static function logout()
+	{
+		if(Auth::get_screen_name()){
+			return Auth::logout();
+		}
+		throw new Model_UserLogoutException("No logged in user to logout");
 	}
 }

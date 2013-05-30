@@ -1,7 +1,9 @@
 <?
 
 class Model_MemberException extends Exception {}
+
 class Model_MemberProjectException extends Model_MemberException {}
+class Model_MemberUserException extends Model_MemberException {}
 class Model_MemberMissingParamException extends Model_MemberException {}
 
 class Model_Member extends \Orm\Model
@@ -35,7 +37,11 @@ class Model_Member extends \Orm\Model
 
 	public static function init($params)
 	{
-		$user = Model_User::init($params);
+		try{
+			$user = Model_User::init($params);
+		}catch(Model_UserException $e){
+			throw new Model_MemberUserException($e->getMessage());
+		}
 
 		$member = new self();
 
@@ -48,8 +54,21 @@ class Model_Member extends \Orm\Model
 
 	public static function login($params)
 	{
-		Model_User::login($params);
+		try{
+			Model_User::login($params);
+		}catch(Model_UserException $e){
+			throw new Model_MemberUserException($e->getMessage());
+		}
 	}
+
+	public static function logout()
+	{
+		try{
+			Model_User::logout();
+		}catch(Model_UserException $e){
+			throw new Model_MemberUserException($e->getMessage());
+		}
+	}	
 
 	public static function get_logged_in_member()
 	{

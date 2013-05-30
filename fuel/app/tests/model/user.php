@@ -86,6 +86,37 @@ class Tests_User extends \Fuel\Core\TestCase
 	}
 
 	/**
+	 * @expectedException Model_UserLoginException
+	 * @expectedExceptionMessage No logged in user
+	 */
+	public function test_logout()
+	{
+		$user = Model_User::init(array(
+			'name' => 'Barry',
+			'email' => 'email@email.com',
+			'password' => 'password',
+			'password_confirm' => 'password',
+		));
+		Model_User::login(array(
+			'email'=>'email@email.com',
+			'password'=>'password'
+		));
+
+		Model_User::logout();
+
+		Model_User::get_logged_in_user();
+	}
+
+	/**
+	 * @expectedException Model_UserLogoutException
+	 * @expectedExceptionMessage No logged in user to logout
+	 */
+	public function test_logout_when_not_logged_in_errors()
+	{
+		Model_User::logout();
+	}
+
+	/**
 	 * @expectedException Model_UserNameException
 	 * @expectedExceptionMessage Name cannot be blank
 	 */
@@ -162,4 +193,6 @@ class Tests_User extends \Fuel\Core\TestCase
 			'password_confirm' => 'not same password',
 		));
 	}
+
+
 }
