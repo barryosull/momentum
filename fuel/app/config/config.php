@@ -81,6 +81,7 @@ return array(
 	// 'language_fallback'  => 'en', // Fallback language when file isn't available for default language
 	// 'locale'             => 'en_US', // PHP set_locale() setting, null to not set
 
+	'locale' => 'en_IE.utf8',
 	/**
 	 * Internal string encoding charset
 	 */
@@ -259,6 +260,7 @@ return array(
 		 */
 		'packages'  => array(
 		 	'orm',
+		 	'auth'
 		),
 
 		/**

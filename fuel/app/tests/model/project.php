@@ -41,10 +41,7 @@ class Tests_Project extends \Fuel\Core\TestCase
 		));
 	}
 
-	/**
-	 * @expectedException Model_ProjectException
-	 */
-	public function test_cant_have_duplicate_project_names()
+	public function test_projects_can_have_same_name()
 	{
 		$project = Model_Project::init(array(
 			'name' => 'Project name'
@@ -53,6 +50,11 @@ class Tests_Project extends \Fuel\Core\TestCase
 		$project_same_name = Model_Project::init(array(
 			'name' => 'Project name'
 		));
+
+		$this->assertNotEquals(
+			$project->id,
+			$project_same_name->id
+		);
 	}
 
 	public function test_get_all()
