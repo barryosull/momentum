@@ -5,6 +5,9 @@ class Model_MemberException extends Exception {}
 class Model_MemberProjectException extends Model_MemberException {}
 class Model_MemberUserException extends Model_MemberException {}
 class Model_MemberMissingParamException extends Model_MemberException {}
+class Model_MemberProjectMismatchException extends Model_MemberException {}
+class Model_MemberProjectNotFoundException extends Model_MemberException {}
+class Model_MemberProjectDuplicateException extends Model_MemberException {}
 
 class Model_Member extends \Orm\Model
 {
@@ -81,6 +84,16 @@ class Model_Member extends \Orm\Model
 		if(isset($this->project[$project->id])){
 			throw new Model_MemberProjectException('Member already has this project');
 		}
+		//see if a project with this name already exists for the user
+		$num_same_project = Model_Project::find()
+			->where('name', $project->name)
+			->where('member_id', $this->id)
+			->count();
+
+		if($num_same_project != 0){
+			throw new Model_MemberProjectDuplicateException('Member has project with this name already');
+		}
+
 		$this->project[] = $project;
 		$this->save();
 	}
@@ -112,5 +125,19 @@ class Model_Member extends \Orm\Model
 					->get();	
 
 		return $times;
+	}
+
+	public function get_project_by_id($id=0)
+	{
+		$project = Model_Project::get_by_id($id);
+		
+		if(!$project){
+			throw new Model_MemberProjectNotFoundException("Project does not exist");
+		}
+		if($project->member_id != $this->id){
+			throw new Model_MemberProjectMismatchException("Project does not belong to member");
+		}
+
+		return $project;
 	}
 }

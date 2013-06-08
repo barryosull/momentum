@@ -13,7 +13,6 @@
 					<td><a href="/auth/register">Not a member? Register here.</a></td>
 					<td align="right"><input type="submit" value="Login"></td></tr>
 			</table>
-			
 		</form>
 	</div>
 </div>

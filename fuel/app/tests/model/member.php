@@ -156,7 +156,6 @@ class Tests_Member extends \Fuel\Core\TestCase
 		$this->assertEquals($project, $project_again);
 	}
 
-
 	public function test_get_all_projects_returns_all()
 	{
 		$projecta = Model_Project::init(array(
@@ -200,5 +199,64 @@ class Tests_Member extends \Fuel\Core\TestCase
 		
 		$time_again = current($times);
 		$this->assertEquals($time, $time_again);
+	}
+
+	public function test_get_project_by_id()
+	{
+		$project = Model_Project::init(array(
+			'name'=>'project'
+		));
+		$this->member->add_project($project);
+		
+		$project_again = $this->member->get_project_by_id($project->id);
+
+		$this->assertEquals($project->id, $project_again->id);
+	}
+
+
+	/**
+	 * @expectedException Model_MemberProjectMismatchException
+	 * @expectedExceptionMessage Project does not belong to member
+	 */
+	public function test_cant_get_project_that_doesnt_belong()
+	{
+		$project = Model_Project::init(array(
+			'name'=>'project'
+		));
+		$this->member->add_project($project);
+		$member_without_project = Model_Member::init(array(
+			'name'=>'Roberto',
+			'email'=>'email2@email.com',
+			'password'=>'password',
+			'password_confirm'=>'password',
+		));
+
+		$member_without_project->get_project_by_id($project->id);
+	}
+
+	/**
+	 * @expectedException Model_MemberProjectNotFoundException
+	 * @expectedExceptionMessage Project does not exist
+	 */
+	public function test_cant_get_project_that_doesnt_exist()
+	{
+		$this->member->get_project_by_id(1);
+	}
+
+	/**
+	 * @expectedException Model_MemberProjectDuplicateException
+	 * @expectedExceptionMessage Member has project with this name already
+	 */
+	public function test_cant_have_project_with_same_name()
+	{
+		$project = Model_Project::init(array(
+			'name'=>'project'
+		));
+		$this->member->add_project($project);
+
+		$project2 = Model_Project::init(array(
+			'name'=>'project'
+		));
+		$this->member->add_project($project2);
 	}
 }

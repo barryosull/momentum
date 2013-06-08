@@ -14,6 +14,8 @@ class BaseController_Loggedin extends BaseController_Template
 			Response::redirect('/auth/login');
 		}
 
-		$this->template->header = View::forge('template/headerloggedin');
+		$this->template->header = View::forge('template/headerloggedin', array(
+			'member'=>$this->member
+		));
 	}
 }

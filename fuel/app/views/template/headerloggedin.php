@@ -11,7 +11,7 @@
 				</ul>
 				<ul class="nav pull-right">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">User <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$member->user->name?> <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                           	<li><a href="/auth/logout">Logout</a></li>
                         </ul>
