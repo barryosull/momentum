@@ -95,12 +95,12 @@ return array(
 	/**
 	 * Salt for the login hash
 	 */
-	'login_hash_salt' => 'put_some_salt_in_here',
+	'login_hash_salt' => 'delicious salt',
 
 	/**
 	 * $_POST key for login username
 	 */
-	'username_post_key' => 'username',
+	'username_post_key' => 'email',
 
 	/**
 	 * $_POST key for login password
