@@ -194,5 +194,23 @@ class Tests_User extends \Fuel\Core\TestCase
 		));
 	}
 
+	public function test_logining_twice_in_a_row_doesnt_break()
+	{
+		$user = Model_User::init(array(
+			'name' => 'Barry',
+			'email' => 'email@email.com',
+			'password' => 'password',
+			'password_confirm' => 'password',
+		));
 
+		Model_User::login(array(
+			'email'=>'email@email.com',
+			'password'=>'password'
+		));
+
+		Model_User::login(array(
+			'email'=>'email@email.com',
+			'password'=>'password'
+		));
+	}
 }

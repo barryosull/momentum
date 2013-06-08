@@ -1,6 +1,6 @@
 <?php
 
-class Controller_Periodoftime extends Controller
+class Controller_Periodoftime extends BaseController_Loggedin
 {
 	public function action_view()
 	{
@@ -9,7 +9,7 @@ class Controller_Periodoftime extends Controller
 
 		$times = Model_PeriodOfTime::get_all_by_date($date);
 
-		return View::forge('periodoftime/view', array(
+		$this->template->body = View::forge('periodoftime/view', array(
 			'day_date' => new Datetime(),
 			'times' => $times
 		));
@@ -17,7 +17,7 @@ class Controller_Periodoftime extends Controller
 
 	public function action_add()
 	{
-		return View::forge('periodoftime/add', array(
+		$this->template->body = View::forge('periodoftime/add', array(
 			'projects' => Model_Project::get_all()
 		));
 	}

@@ -66,10 +66,10 @@ class Auth_Login_Simpleauth extends \Auth_Login_Driver
 		if ( ! empty($username) and ! empty($login_hash))
 		{
 
-			if (is_null($this->user) or ($this->user['username'] != $username and $this->user != static::$guest_login))
+			if (is_null($this->user) or ($this->user['email'] != $username and $this->user != static::$guest_login))
 			{
 				$this->user = \DB::select_array(\Config::get('simpleauth.table_columns', array('*')))
-					->where('username', '=', $username)
+					->where('email', '=', $username)
 					->from(\Config::get('simpleauth.table_name'))
 					->execute(\Config::get('simpleauth.db_connection'))->current();
 			}

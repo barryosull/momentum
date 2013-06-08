@@ -1,19 +1,19 @@
 <?php
 
-class Controller_Project extends Controller
+class Controller_Project extends BaseController_Loggedin
 {
 	public function action_view()
 	{
 		$projects = Model_Project::get_all();
 
-		return View::forge('project/view', array(
+		$this->template->body = View::forge('project/view', array(
 			'projects' => $projects
 		));
 	}
 
 	public function action_add()
 	{
-		return View::forge('project/add');
+		$this->template->body = View::forge('project/add');
 	}
 
 	public function action_add_post()
