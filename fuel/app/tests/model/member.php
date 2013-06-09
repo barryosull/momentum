@@ -171,15 +171,6 @@ class Tests_Member extends \Fuel\Core\TestCase
 
 		$this->assertEquals(2, count($projects));
 	}
-
-	/**
-	 * @expectedException Model_MemberMissingParamException
-	 * @expectedExceptionMessage Model_PeriodOfTime param is missing
-	 */
-	public function test_add_period_of_time_requires_proper_model()
-	{
-		$this->member->add_period_of_time(new DateTime());
-	}
 	
 	public function test_get_all_period_of_time_by_date_returns_period_of_time()
 	{
@@ -187,10 +178,10 @@ class Tests_Member extends \Fuel\Core\TestCase
 			'name'=>'project'
 		));
 		$time = Model_PeriodOfTime::init(array(
-			'project' => $project,
 			'minutes' => 20
 		));
-		$this->member->add_period_of_time($time);
+		$project->add_periodoftime($time);
+		$this->member->add_project($project);
 
 		$datetime = new DateTime();
 		$date = new DateTime($datetime->format('Y-m-d'));
@@ -212,7 +203,6 @@ class Tests_Member extends \Fuel\Core\TestCase
 
 		$this->assertEquals($project->id, $project_again->id);
 	}
-
 
 	/**
 	 * @expectedException Model_MemberProjectMismatchException
@@ -258,5 +248,39 @@ class Tests_Member extends \Fuel\Core\TestCase
 			'name'=>'project'
 		));
 		$this->member->add_project($project2);
+	}
+
+	public function test_remove_project()
+	{
+		$project = Model_Project::init(array(
+			'name'=>'project'
+		));
+		$this->member->add_project($project);
+		
+		$this->member->remove_project($project);
+		
+		$projects = $this->member->get_all_projects();
+		$this->assertEquals(0, count($projects));
+	}
+
+	public function test_get_all_period_of_time_by_date_doesnt_break_when_project_is_deleted()
+	{
+		$project = Model_Project::init(array(
+			'name'=>'project'
+		));
+		$time = Model_PeriodOfTime::init(array(
+			'minutes' => 20
+		));
+		$project->add_periodoftime($time);
+		$this->member->add_project($project);
+
+		$project->delete();
+
+		$datetime = new DateTime();
+		$date = new DateTime($datetime->format('Y-m-d'));
+
+		$times = $this->member->get_all_period_of_time_by_date($date);
+		
+		$this->assertEquals(0, count($times));
 	}
 }

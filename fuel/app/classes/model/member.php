@@ -4,7 +4,6 @@ class Model_MemberException extends Exception {}
 
 class Model_MemberProjectException extends Model_MemberException {}
 class Model_MemberUserException extends Model_MemberException {}
-class Model_MemberMissingParamException extends Model_MemberException {}
 class Model_MemberProjectMismatchException extends Model_MemberException {}
 class Model_MemberProjectNotFoundException extends Model_MemberException {}
 class Model_MemberProjectDuplicateException extends Model_MemberException {}
@@ -94,7 +93,7 @@ class Model_Member extends \Orm\Model
 			throw new Model_MemberProjectDuplicateException('Member has project with this name already');
 		}
 
-		$this->project[] = $project;
+		$this->project[$project->id] = $project;
 		$this->save();
 	}
 
@@ -103,26 +102,23 @@ class Model_Member extends \Orm\Model
 		return $this->project;
 	}
 
-	public function add_period_of_time($time=array())
-	{
-		if(get_class($time) != 'Model_PeriodOfTime'){
-
-			throw new Model_MemberMissingParamException('Model_PeriodOfTime param is missing');
-		}
-		$this->periodoftime[] = $time;
-		$this->save();
-	}
-
 	public function get_all_period_of_time_by_date(DateTime $date)
 	{
+		if(count($this->project) == 0){
+			return array();
+		}
 		$timestamp = $date->getTimestamp();
 		$day_after_timestamp = $timestamp + 86400;
 		
-		$times = Model_PeriodOfTime::find()
-					->where('member_id', $this->id)
+		$query = Model_PeriodOfTime::find()					
 					->where('created_at', '>=', $timestamp)
-					->where('created_at', '<', $day_after_timestamp)
-					->get();	
+					->where('created_at', '<', $day_after_timestamp);
+
+		foreach($this->project as $project){
+			$query->or_where('project_id', $project->id);
+		}
+
+		$times = $query->get();	
 
 		return $times;
 	}
@@ -139,5 +135,11 @@ class Model_Member extends \Orm\Model
 		}
 
 		return $project;
+	}
+
+	public function remove_project($project)
+	{
+		unset($this->project[$project->id]);
+		$this->save();
 	}
 }

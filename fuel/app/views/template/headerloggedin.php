@@ -7,7 +7,7 @@
 					<li><a href="/periodoftime/view">Todays Times</a></li>
 					<li><a href="/project/view">View Projects</a></li>
 					<li><a href="/project/add">Add Projects</a></li>
-					
+					<li><a href="/project/timetotals">Project times</a></li>
 				</ul>
 				<ul class="nav pull-right">
                     <li class="dropdown">

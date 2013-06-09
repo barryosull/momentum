@@ -1,10 +1,7 @@
 <div class="row">
 	<div class="span6">
 		<h4>Projects - <a class="btn" href="/project/add">Add</a></h4> 
-	</div>
-</div>
-<div class="row">
-	<div class="span6">
+		<br/><br/>
 		<table class="table table-condensed table-bordered table-striped">
 			<thead>
 				<th>Name</th>
@@ -14,7 +11,7 @@
 				<?foreach($projects as $project):?>
 					<tr>
 						<td><?=$project->name?></td>
-						<td><a href="/project/delete/<?=$project->id?>">Delete</a></td>
+						<td><a class="btn" href="/project/delete/<?=$project->id?>">Delete</a></td>
 					</tr>
 				<?endforeach;?>
 			</tbody>
