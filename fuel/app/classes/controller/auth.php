@@ -24,7 +24,7 @@ class Controller_Auth extends BaseController_Template
 			Response::redirect('/auth/login');
 		}
 
-		Response::redirect('/project/add');
+		Response::redirect('/periodoftime/view');
 	}
 
 	public function action_register()

@@ -4,6 +4,8 @@ class Controller_Periodoftime extends BaseController_Loggedin
 {
 	public function action_view()
 	{
+		$this->redirect_if_no_projects();
+		
 		$datetime = new DateTime();
 		$date = new DateTime($datetime->format('Y-m-d'));
 
@@ -13,6 +15,15 @@ class Controller_Periodoftime extends BaseController_Loggedin
 			'day_date' => new Datetime(),
 			'times' => $times
 		));
+	}
+
+	private function redirect_if_no_projects()
+	{
+		$projects = $this->member->get_all_projects();
+		if(count($projects) == 0){
+			Session::set_flash('message', "Looks like you haven't added any projects. Please add a project to start");
+			Response::redirect('/project/add');
+		}
 	}
 
 	public function action_add()
