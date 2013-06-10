@@ -3,7 +3,11 @@
 	<div class="span6">
 		<h3>Project Times</h3>
 		The total time spent on each project for the following week
-		<h4>Week <?=$week_start->format('d/m/Y')?> - <?=$week_end->format('d/m/Y')?></h4>
+		<?
+		$day_before_week_end = clone $week_end;
+		$day_before_week_end->modify('-1 day');
+		?>
+		<h4>Week <?=$week_start->format('d/m/Y')?> - <?=$day_before_week_end->format('d/m/Y')?></h4>
 		<div id="project_times" style="height: 250px"></div>
 		<table data-chart-id="project_times" class="table table-bordered table-condensed view_as_bar_chart">
 			<thead>

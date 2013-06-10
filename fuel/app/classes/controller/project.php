@@ -44,8 +44,8 @@ class Controller_Project extends BaseController_Loggedin
 			$week_end = clone $week_start;
 			$week_end->modify('+7 days');
 		}else{
-			$week_start = new DateTime('Monday last week');
-			$week_end = new DateTime('Monday this week');
+			$week_start = new DateTime('Sunday last week');
+			$week_end = new DateTime('Sunday this week');
 		}
 		
 		$last_week_start = clone $week_start;

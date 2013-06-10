@@ -19,6 +19,17 @@ if($error):?>
 		</div>
 	</div>
 <?endif;?>
+<?$message = Session::get_flash('message');
+if($message):?>
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="alert alert-success">
+		  		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		  		<?=$message?>
+			</div>
+		</div>
+	</div>
+<?endif;?>
 <?=$body?>
 <?=$footer?>
 </div>
