@@ -18,6 +18,12 @@ class Model_Project extends \Orm\Model
 		'member'
 	);	
 
+	protected static $_has_many = array(
+		'periodoftime'
+	);
+
+	protected static $_table_name = 'projects';
+
 	protected static $_observers = array(
 		'Orm\Observer_CreatedAt' => array(
 			'events' => array('before_insert'),
@@ -27,11 +33,11 @@ class Model_Project extends \Orm\Model
 			'events' => array('before_update'),
 			'mysql_timestamp' => false,
 		),
+		'Orm\\Observer_Self' => array(
+    		'events' => array('before_delete')
+    	)
 	);
-	protected static $_table_name = 'projects';
-
-	protected static $_has_many = array('periodoftime');
-
+	
 	public static function init($params)
 	{
 		if($params['name'] == ''){
@@ -50,8 +56,38 @@ class Model_Project extends \Orm\Model
 		return self::find()->where('id', '=', $id)->get_one();
 	}
 
-	public static function get_all()
+	public function add_periodoftime($time)
 	{
-		return self::find()->get();
+		$this->periodoftime[] = $time;
+		$this->save();
+	}
+
+	public function get_totaltime()
+	{
+		$from = new DateTime('1971-01-01');
+		$to = new DateTime('2030-01-01');
+		return $this->get_totaltime_for_date_range($from, $to);
+	}
+
+	public function get_totaltime_for_date_range(DateTime $from, DateTime $to)
+	{
+		$times = Model_PeriodOfTime::find()
+			->where('project_id', $this->id)
+			->where('created_at', '>=', $from->getTimestamp()) 
+			->where('created_at', '<', $to->getTimestamp()) 
+			->get();
+
+		$total = 0;
+
+		foreach($times as $time){
+			$total += $time->minutes;
+		}
+
+		return $total;
+	}
+
+	public function _event_before_delete()
+	{
+		$this->member->remove_project($this);
 	}
 }

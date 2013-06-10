@@ -37,4 +37,30 @@ class Controller_Project extends BaseController_Loggedin
 		Response::redirect('/project/view');
 	}
 
+	public function action_timetotals($start_date = '')
+	{
+		if($start_date != ''){
+			$week_start = new DateTime($start_date);
+			$week_end = clone $week_start;
+			$week_end->modify('+7 days');
+		}else{
+			$week_start = new DateTime('Monday last week');
+			$week_end = new DateTime('Monday this week');
+		}
+		
+		$last_week_start = clone $week_start;
+		$last_week_start->modify('-7 days');
+		
+		$next_week_start = clone $week_start;
+		$next_week_start->modify('+7 days');
+
+		$data = array(
+			'projects'=>$this->member->get_all_projects(),
+			'week_start'=>$week_start,
+			'week_end'=>$week_end,
+			'last_week_start'=>$last_week_start,
+			'next_week_start'=>$next_week_start,
+		);
+		$this->template->body = View::forge('project/timetotals', $data);
+	}
 }

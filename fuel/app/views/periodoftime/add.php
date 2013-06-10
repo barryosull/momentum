@@ -1,6 +1,7 @@
-<div class="row">
-	<div class="span12">
-		<h4>Add Time</h4> 
+<div class="row-fluid">
+	<div class="span3"></div>
+	<div class="span6">
+		<h3>Add a Time</h3> 
 		<form action="/periodoftime/add_post" method="post">
 			Project: <select name="project_id">
 				<?foreach($projects as $project):?>

@@ -28,15 +28,22 @@ class Controller_Periodoftime extends BaseController_Loggedin
 		$minutes = Input::post('minutes');
 		try{
 			$time = Model_PeriodOfTime::init(array(
-				'project' => $project,
 				'minutes' => $minutes
 			));
-			$this->member->add_period_of_time($time);
+			$project->add_periodoftime($time);
+
 		}catch(Model_PeriodOfTimeException $e){
 			Session::set_flash('error', $e->getMessage());
 			Response::redirect('/periodoftime/add');
 		}
 
+		Response::redirect('/periodoftime/view');
+	}
+
+	public function action_delete($id)
+	{
+		$time = $this->member->get_periodotime_by_id($id);
+		$time->delete();
 		Response::redirect('/periodoftime/view');
 	}
 }

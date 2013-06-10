@@ -1,20 +1,22 @@
-<div class="row">
+<div class="row-fluid">
+	<div class="span3"></div>
 	<div class="span6">
-		<h4>Projects - <a class="btn" href="/project/add">Add</a></h4> 
-	</div>
-</div>
-<div class="row">
-	<div class="span6">
+		<h3>Projects</h3>
+		All the projects that are currently active
+		<a class="btn pull-right" href="/project/add">Add Project</a>
+		<br/><br/>
 		<table class="table table-condensed table-bordered table-striped">
 			<thead>
 				<th>Name</th>
-				<th></th>
+				<th>Time</th>
+				<th>Options</th>
 			</thead>
 			<tbody>
 				<?foreach($projects as $project):?>
 					<tr>
 						<td><?=$project->name?></td>
-						<td><a href="/project/delete/<?=$project->id?>">Delete</a></td>
+						<td><?=Model_TimeFormat::mins_to_string($project->get_totaltime())?></td>
+						<td><a class="btn" href="/project/delete/<?=$project->id?>">Delete</a></td>
 					</tr>
 				<?endforeach;?>
 			</tbody>
