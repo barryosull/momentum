@@ -20,7 +20,6 @@ class Tests_PeriodOfTime extends \Fuel\Core\TestCase
 	public function test_create_periodoftime()
 	{
 		$time = Model_PeriodOfTime::init(array(
-			'project' => $this->project,
 			'minutes' => 20
 		));
 
@@ -34,35 +33,8 @@ class Tests_PeriodOfTime extends \Fuel\Core\TestCase
 			$time->minutes,
 			$time_again->minutes
 		);
-		$this->assertEquals(
-			$time->project,
-			$time_again->project
-		);
 	}
 
-	/**
-	 * @expectedException Model_PeriodOfTimeException
-	 */
-	public function test_create_fails_when_no_project()
-	{
-		$time = Model_PeriodOfTime::init(array(
-			'minutes' => 20
-		));
-	}
-
-	/**
-	 * @expectedException Model_PeriodOfTimeException
-	 */
-	public function test_project_must_be_correct_type()
-	{
-		$bad_project = (object)array();
-		$bad_project->id = 1;
-
-		$time = Model_PeriodOfTime::init(array(
-			'project' => $bad_project,
-			'minutes' => 20
-		));
-	}
 
 	/**
 	 * @expectedException Model_PeriodOfTimeException
@@ -70,7 +42,6 @@ class Tests_PeriodOfTime extends \Fuel\Core\TestCase
 	public function test_minutes_cant_be_less_than_zero()
 	{
 		$time = Model_PeriodOfTime::init(array(
-			'project' => $this->project,
 			'minutes' => -10
 		));
 	}
@@ -81,31 +52,20 @@ class Tests_PeriodOfTime extends \Fuel\Core\TestCase
 	public function test_minutes_cant_be_zero()
 	{
 		$time = Model_PeriodOfTime::init(array(
-			'project' => $this->project,
 			'minutes' => 0
 		));
 	}
 
-	public function test_get_all_by_date()
+	public function test_get_by_id()
 	{
-		$datetime = new DateTime();
-		$date = new DateTime($datetime->format('Y-m-d'));
-
-		$times = Model_PeriodOfTime::get_all_by_date($date);
-		$this->assertEquals(0, count($times));
-		
 		$time = Model_PeriodOfTime::init(array(
-			'project' => $this->project,
-			'minutes' => 10
+			'minutes' => 2
 		));
-		$times = Model_PeriodOfTime::get_all_by_date($date);
-		$this->assertEquals(1, count($times));
+		$time_again = Model_PeriodOfTime::get_by_id($time->get_id());
 
-		$time = Model_PeriodOfTime::init(array(
-			'project' => $this->project,
-			'minutes' => 10
-		));
-		$times = Model_PeriodOfTime::get_all_by_date($date);
-		$this->assertEquals(2, count($times));
+		$this->assertEquals(
+			$time->get_id(),
+			$time_again->get_id()
+		);
 	}
 }

@@ -57,21 +57,82 @@ class Tests_Project extends \Fuel\Core\TestCase
 		);
 	}
 
-	public function test_get_all()
+	public function test_get_totaltime_for_date_range()
 	{
 		$project = Model_Project::init(array(
 			'name' => 'Project name'
 		));
-		$project2 = Model_Project::init(array(
-			'name' => 'Project name2'
+		$time = Model_PeriodOfTime::init(array(
+			'minutes' => 20
+		));
+		$project->add_periodoftime($time);
+
+		$yesterday = new Datetime('-1 days');
+		$tomorrow = new Datetime('+1 days');
+
+		$total_time = $project->get_totaltime_for_date_range($yesterday, $tomorrow);
+
+		$this->assertEquals(
+			20,
+			$total_time
+		);
+	}
+
+	public function test_get_totaltime_for_outside_date_range()
+	{
+		$project = Model_Project::init(array(
+			'name' => 'Project name'
+		));
+		$time = Model_PeriodOfTime::init(array(
+			'minutes' => 20
+		));
+		$project->add_periodoftime($time);
+
+		$_3_days_ago = new Datetime('-3 days');
+		$_1_day_ago = new Datetime('-1 days');
+
+		$total_time = $project->get_totaltime_for_date_range($_3_days_ago, $_1_day_ago);
+
+		$this->assertEquals(
+			0,
+			$total_time
+		);
+	}
+
+	public function test_delete_calls_remove_function_on_parent()
+	{
+		$project = Model_Project::init(array(
+			'name' => 'Project name'
 		));
 
-		$projects = Model_Project::get_all();
-		$first = current($projects);
-		$second = next($projects);
+		$mock_member = $this->getMock('Model_Member', array('remove_project'));
+		$mock_member->expects($this->once())
+                 	->method('remove_project');
 
-		$this->assertEquals(2, count($projects));
-		$this->assertEquals('Project name', $first->name);
-		$this->assertEquals('Project name2', $second->name);
+		$project->member = $mock_member;
+		
+		$project->delete();
+	}
+
+	public function test_get_totaltime()
+	{
+		$project = Model_Project::init(array(
+			'name' => 'Project name'
+		));
+		$time = Model_PeriodOfTime::init(array(
+			'minutes' => 20
+		));
+		$time2 = Model_PeriodOfTime::init(array(
+			'minutes' => 30
+		));
+		$project->add_periodoftime($time);
+		$project->add_periodoftime($time2);
+
+		$total_time = $project->get_totaltime();
+
+		$this->assertEquals(
+			50,
+			$total_time
+		);
 	}
 }
