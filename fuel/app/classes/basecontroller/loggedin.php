@@ -3,6 +3,7 @@
 class BaseController_Loggedin extends BaseController_Template
 {
 	protected $member;
+	private $active_uri;
 
 	public function before()
 	{
@@ -14,8 +15,11 @@ class BaseController_Loggedin extends BaseController_Template
 			Response::redirect('/auth/login');
 		}
 
+		$active_uri = Uri::string();
+
 		$this->template->header = View::forge('template/headerloggedin', array(
-			'member'=>$this->member
+			'member'=>$this->member,
+			'active'=>$active_uri,
 		));
 	}
 }

@@ -1,5 +1,6 @@
-<div class="row">
-	<div class="offset3 span6">
+<div class="row-fluid">
+	<div class="span3"></div>
+	<div class="span6">
 		<h3>Login</h3> 
 		<form action="/auth/login_post" method="post">
 			<table border="0">

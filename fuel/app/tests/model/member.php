@@ -171,6 +171,25 @@ class Tests_Member extends \Fuel\Core\TestCase
 
 		$this->assertEquals(2, count($projects));
 	}
+
+	public function test_get_all_projects_returns_alphabetical()
+	{
+		$projecta = Model_Project::init(array(
+			'name' => 'Project name2'
+		));
+		$projectb = Model_Project::init(array(
+			'name' => 'Project name'
+		));
+		$this->member->add_project($projecta);
+		$this->member->add_project($projectb);
+
+		$projects = $this->member->get_all_projects();
+		$first = current($projects);
+		$second = next($projects);
+
+		$this->assertEquals('Project name', $first->name);
+		$this->assertEquals('Project name2', $second->name);
+	}
 	
 	public function test_get_all_period_of_time_by_date_returns_period_of_time()
 	{
@@ -282,5 +301,43 @@ class Tests_Member extends \Fuel\Core\TestCase
 		$times = $this->member->get_all_period_of_time_by_date($date);
 		
 		$this->assertEquals(0, count($times));
+	}
+
+	public function test_get_periodoftime_by_id()
+	{
+		$project = Model_Project::init(array(
+			'name'=>'project'
+		));
+		$time = Model_PeriodOfTime::init(array(
+			'minutes' => 20
+		));
+		$project->add_periodoftime($time);
+		$this->member->add_project($project);
+		
+		$time_again = $this->member->get_periodotime_by_id($time->id);
+
+		$this->assertEquals($time->id, $time_again->id);
+	}
+
+	/**
+	 * @expectedException Model_MemberPeriodoftimeMismatchException
+	 * @expectedExceptionMessage PeriodOfTime does not belong to member
+	 */
+	public function test_cant_get_periodoftime_for_another_period_of_time()
+	{
+		$time = Model_PeriodOfTime::init(array(
+			'minutes' => 20
+		));
+		
+		$time_again = $this->member->get_periodotime_by_id($time->id);
+	}
+
+	/**
+	 * @expectedException Model_MemberPeriodoftimeNotFoundException
+	 * @expectedExceptionMessage PeriodOfTime could not be found
+	 */
+	public function test_cant_get_nonexistant_periodoftime()
+	{	
+		$time = $this->member->get_periodotime_by_id(123);
 	}
 }

@@ -42,7 +42,7 @@ class Controller_Periodoftime extends BaseController_Loggedin
 
 	public function action_delete($id)
 	{
-		$time = Model_PeriodOfTime::get_by_id($id);
+		$time = $this->member->get_periodotime_by_id($id);
 		$time->delete();
 		Response::redirect('/periodoftime/view');
 	}

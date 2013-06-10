@@ -1,6 +1,8 @@
-<div class="row">
+<div class="row-fluid">
+	<div class="span3"></div>
 	<div class="span6">
 		<h3>Project Times</h3>
+		The total time spent on each project for the following week
 		<h4>Week <?=$week_start->format('d/m/Y')?> - <?=$week_end->format('d/m/Y')?></h4>
 		<div id="project_times" style="height: 250px"></div>
 		<table data-chart-id="project_times" class="table table-bordered table-condensed view_as_bar_chart">

@@ -57,24 +57,6 @@ class Tests_Project extends \Fuel\Core\TestCase
 		);
 	}
 
-	public function test_get_all()
-	{
-		$project = Model_Project::init(array(
-			'name' => 'Project name'
-		));
-		$project2 = Model_Project::init(array(
-			'name' => 'Project name2'
-		));
-
-		$projects = Model_Project::get_all();
-		$first = current($projects);
-		$second = next($projects);
-
-		$this->assertEquals(2, count($projects));
-		$this->assertEquals('Project name', $first->name);
-		$this->assertEquals('Project name2', $second->name);
-	}
-
 	public function test_get_totaltime_for_date_range()
 	{
 		$project = Model_Project::init(array(
@@ -130,5 +112,27 @@ class Tests_Project extends \Fuel\Core\TestCase
 		$project->member = $mock_member;
 		
 		$project->delete();
+	}
+
+	public function test_get_totaltime()
+	{
+		$project = Model_Project::init(array(
+			'name' => 'Project name'
+		));
+		$time = Model_PeriodOfTime::init(array(
+			'minutes' => 20
+		));
+		$time2 = Model_PeriodOfTime::init(array(
+			'minutes' => 30
+		));
+		$project->add_periodoftime($time);
+		$project->add_periodoftime($time2);
+
+		$total_time = $project->get_totaltime();
+
+		$this->assertEquals(
+			50,
+			$total_time
+		);
 	}
 }

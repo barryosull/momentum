@@ -56,15 +56,17 @@ class Model_Project extends \Orm\Model
 		return self::find()->where('id', '=', $id)->get_one();
 	}
 
-	public static function get_all()
-	{
-		return self::find()->get();
-	}
-
 	public function add_periodoftime($time)
 	{
 		$this->periodoftime[] = $time;
 		$this->save();
+	}
+
+	public function get_totaltime()
+	{
+		$from = new DateTime('1971-01-01');
+		$to = new DateTime('2030-01-01');
+		return $this->get_totaltime_for_date_range($from, $to);
 	}
 
 	public function get_totaltime_for_date_range(DateTime $from, DateTime $to)
