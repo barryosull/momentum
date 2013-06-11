@@ -7,6 +7,7 @@ var Helpers = {};
 Helpers.Time = {};
 Helpers.Time.mins_to_string = function(mins)
 {
+	mins = new Number(mins);
 	mins = mins.toFixed(0);
 	var hours = (mins/60).toFixed(0);
 	var mins_remainder = (mins%60);
@@ -59,12 +60,53 @@ Controllers.Periodoftime.view = function()
 {
 	var template = $('#periodoftime_view_template').html();
 	$('#content').html(template);
+
+	$.get(
+		'/periodoftime/list.json?hash='+user.login_hash, 
+		Controllers.Periodoftime.got_times
+	);
+}
+
+Controllers.Periodoftime.got_times = function(json)
+{
+	var times = json.data;
+	Views.Periodoftime.view(times);
 }
 
 Controllers.Periodoftime.add = function()
 {
 	var template = $('#periodoftime_add_template').html();
 	$('#content').html(template);
+
+	$.get(
+		'/project/list.json?hash='+user.login_hash, 
+		Controllers.Periodoftime.got_projects
+	);
+}
+
+Controllers.Periodoftime.got_projects = function(json)
+{
+	var projects = json.data;
+	Views.Periodoftime.add(projects);
+}
+
+Controllers.Periodoftime.add_post = function()
+{
+	var project_id = $('#content select[name=project_id]').val();
+	var minutes = $('#content input[name=minutes]').val();
+	$.post(
+		'/periodoftime/list.json?hash='+user.login_hash, 
+		{project_id: project_id, minutes: minutes},
+		Controllers.Periodoftime.added
+	);
+}
+
+Controllers.Periodoftime.added = function(json)
+{
+	if(json.error){
+		return Views.Error.show(json.error);	
+	}
+	Controllers.Periodoftime.view();
 }
 
 Controllers.Project = {};
@@ -191,6 +233,48 @@ Views.Project.view = function(projects)
 Views.Project.delete = function(project)
 {
 	$('#project_'+project.id).fadeOut();
+}
+
+Views.Periodoftime = {};
+
+Views.Periodoftime.view = function(times)
+{
+	var total = 0;
+	$("#content .times .row_dynamic").remove();
+	$.each(times, function(key, time){
+		
+		var row = $("#content .times .row_template").clone();
+		row.attr('id', 'times_'+time.id);
+		row.find('.project').html(time.project.name);
+		row.find('.time').html(Helpers.Time.mins_to_string(time.minutes));
+		
+		var href = row.find('a').attr('href')+'/'+time.id;
+		row.find('a').attr('href', href);
+
+		row.removeClass('row_template');
+		row.addClass('row_dynamic');
+		
+		row.hide();
+		$("#content .times tbody").append(row);
+		row.fadeIn();
+
+		total += new Number(time.minutes);
+	});
+
+	$("#content .times .total").html(
+		Helpers.Time.mins_to_string(total)
+	);
+}
+
+Views.Periodoftime.add = function(projects)
+{
+	$("#content .project_id option").remove();
+	$.each(projects, function(key, project){
+		
+		var option = '<option value="'+project.id+'">'+project.name+'</option>';
+		console.log(option);
+		$("#content select[name=project_id]").append(option);
+	});
 }
 
 function init()

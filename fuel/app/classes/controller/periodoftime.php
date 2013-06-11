@@ -1,39 +1,18 @@
 <?php
 
-class Controller_Periodoftime extends BaseController_Loggedin
+class Controller_Periodoftime extends BaseController_ValidMember
 {
-	public function action_view()
+	public function get_list()
 	{
-		$this->redirect_if_no_projects();
-		
 		$datetime = new DateTime();
 		$date = new DateTime($datetime->format('Y-m-d'));
 
 		$times = $this->member->get_all_period_of_time_by_date($date);
-
-		$this->template->body = View::forge('periodoftime/view', array(
-			'day_date' => new Datetime(),
-			'times' => $times
-		));
+		$objs = $this->convert_objects($times);
+		$this->respond($times);
 	}
 
-	private function redirect_if_no_projects()
-	{
-		$projects = $this->member->get_all_projects();
-		if(count($projects) == 0){
-			Session::set_flash('message', "Looks like you haven't added any projects. Please add a project to start");
-			Response::redirect('/project/add');
-		}
-	}
-
-	public function action_add()
-	{
-		$this->template->body = View::forge('periodoftime/add', array(
-			'projects' => $this->member->get_all_projects()
-		));
-	}
-
-	public function action_add_post()
+	public function post_list()
 	{
 		$project = $this->member->get_project_by_id(Input::post('project_id'));
 		$minutes = Input::post('minutes');
@@ -44,11 +23,9 @@ class Controller_Periodoftime extends BaseController_Loggedin
 			$project->add_periodoftime($time);
 
 		}catch(Model_PeriodOfTimeException $e){
-			Session::set_flash('error', $e->getMessage());
-			Response::redirect('/periodoftime/add');
+			return $this->error_respond($e->getMessage());
 		}
-
-		Response::redirect('/periodoftime/view');
+		$this->respond();
 	}
 
 	public function action_delete($id)

@@ -93,7 +93,9 @@ class Model_Project extends \Orm\Model
 
 	public function to_object()
 	{
-		$obj = parent::to_object();
+		$obj = (object)array();
+		$obj->id = $this->id;
+		$obj->name = $this->name;
 		$obj->totaltime = $this->get_totaltime();
 		return $obj;
 	}

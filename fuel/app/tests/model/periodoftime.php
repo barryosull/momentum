@@ -68,4 +68,17 @@ class Tests_PeriodOfTime extends \Fuel\Core\TestCase
 			$time_again->get_id()
 		);
 	}
+
+	public function test_to_object()
+	{
+		$time = Model_PeriodOfTime::init(array(
+			'minutes' => 2
+		));
+		$this->project->add_periodoftime($time);
+
+		$obj = $time->to_object();
+
+		$this->assertEquals(2, $obj->minutes);
+		$this->assertEquals($this->project->id, $obj->project->id);
+	}
 }

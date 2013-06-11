@@ -6,28 +6,26 @@
 		<a class="btn pull-right" href="/periodoftime/add">Add time</a>
 		<br/>
 		<br/>
-		<table id="periodoftime_table" class="table table-condensed table-bordered table-striped">
+		<table class="times table table-condensed table-bordered table-striped">
 			<thead>
-				<th>Date</th>
 				<th>Project</th>
 				<th>Time</th>
 				<th>Options</th>
 			</thead>
 			<tbody>
 				<tr class="row_template">
-					<td class="date"></td>
 					<td class="project"></td>
 					<td class="time"></td>
 					<td><a class="btn" href="/periodoftime/delete/">Delete</a></td>
 				</tr>
-
+			</tbody>
+			<tfoot>
 				<tr>
-					<td></td>
 					<td></td>
 					<td class="total" style="padding-top:20px"></td>
 					<td></td>
 				</tr>
-			</tbody>
+			</tfoot>
 		</table>
 	</div>
 </div>

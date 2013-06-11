@@ -57,4 +57,13 @@ class Model_PeriodOfTime extends \Orm\Model
 	{
 		return self::find()->where('id', '=', $id)->get_one();
 	}
+
+	public function to_object()
+	{
+		$obj = (object)array();
+		$obj->id = $this->id;
+		$obj->minutes = $this->minutes;
+		$obj->project = $this->project->to_object();
+		return $obj;
+	}
 }
