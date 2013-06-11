@@ -90,4 +90,11 @@ class Model_Project extends \Orm\Model
 	{
 		$this->member->remove_project($this);
 	}
+
+	public function to_object()
+	{
+		$obj = parent::to_object();
+		$obj->totaltime = $this->get_totaltime();
+		return $obj;
+	}
 }

@@ -6,7 +6,7 @@
 		<a class="btn pull-right" href="/periodoftime/add">Add time</a>
 		<br/>
 		<br/>
-		<table class="table table-condensed table-bordered table-striped">
+		<table id="periodoftime_table" class="table table-condensed table-bordered table-striped">
 			<thead>
 				<th>Date</th>
 				<th>Project</th>
@@ -14,20 +14,17 @@
 				<th>Options</th>
 			</thead>
 			<tbody>
-				<?$total = 0;?>
-				<?foreach($times as $periodoftime):?>
-					<tr>
-						<td><?=$day_date->format('d/m/Y')?></td>
-						<td><?=$periodoftime->project->name?></td>
-						<td><?=Model_TimeFormat::mins_to_string($periodoftime->minutes)?></td>
-						<td><a class="btn" href="/periodoftime/delete/<?=$periodoftime->id?>">Delete</a></td>
-					</tr>
-					<?$total += $periodoftime->minutes?>
-				<?endforeach;?>
+				<tr class="row_template">
+					<td class="date"></td>
+					<td class="project"></td>
+					<td class="time"></td>
+					<td><a class="btn" href="/periodoftime/delete/">Delete</a></td>
+				</tr>
+
 				<tr>
 					<td></td>
 					<td></td>
-					<td style="padding-top:20px"><?=Model_TimeFormat::mins_to_string($total)?></td>
+					<td class="total" style="padding-top:20px"></td>
 					<td></td>
 				</tr>
 			</tbody>

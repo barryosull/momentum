@@ -23,7 +23,7 @@ class Tests_User extends \Fuel\Core\TestCase
 		$this->assertEquals('email@email.com', $user->email);
 	}
 
-	public function test_user_can_login()
+	public function test_get_user_by_loginhash()
 	{
 		$user = Model_User::init(array(
 			'name' => 'Barry',
@@ -31,17 +31,26 @@ class Tests_User extends \Fuel\Core\TestCase
 			'password' => 'password',
 			'password_confirm' => 'password',
 		));
-
-		Model_User::login(array(
+		$login_hash = Model_User::get_login_hash_for_login_details(array(
 			'email'=>'email@email.com',
 			'password'=>'password'
 		));
+		
+		$user_by_hash = Model_User::get_by_login_hash(
+			$login_hash
+		);
 
-		$user_again = Model_User::get_logged_in_user();
+		$this->assertEquals($user->id, $user_by_hash->id);
+	}
 
-		$this->assertEquals(
-			$user->id,
-			$user_again->id
+	/**
+	 * @expectedException Model_UserHashException
+	 * @expectedExceptionMessage The user is logged out. Please login in again.
+	 */
+	public function test_bad_get_user_by_loginhash()
+	{
+		$user_by_hash = Model_User::get_by_login_hash(
+			'dasfasdfasdf'
 		);
 	}
 
@@ -51,7 +60,7 @@ class Tests_User extends \Fuel\Core\TestCase
 	 */
 	public function test_bad_login_for_nonexistant_user()
 	{
-		Model_User::login(array(
+		Model_User::get_login_hash_for_login_details(array(
 			'email'=>'does_not_exist',
 			'password'=>'password'
 		));
@@ -70,50 +79,10 @@ class Tests_User extends \Fuel\Core\TestCase
 			'password_confirm' => 'password',
 		));
 
-		Model_User::login(array(
+		Model_User::get_login_hash_for_login_details(array(
 			'email'=>'wrong_email',
 			'password'=>'password'
 		));
-	}
-
-	/**
-	 * @expectedException Model_UserLoginException
-	 * @expectedExceptionMessage No logged in user
-	 */
-	public function test_get_loggedin_user_fails_when_no_user()
-	{
-		Model_User::get_logged_in_user();
-	}
-
-	/**
-	 * @expectedException Model_UserLoginException
-	 * @expectedExceptionMessage No logged in user
-	 */
-	public function test_logout()
-	{
-		$user = Model_User::init(array(
-			'name' => 'Barry',
-			'email' => 'email@email.com',
-			'password' => 'password',
-			'password_confirm' => 'password',
-		));
-		Model_User::login(array(
-			'email'=>'email@email.com',
-			'password'=>'password'
-		));
-
-		Model_User::logout();
-
-		Model_User::get_logged_in_user();
-	}
-
-	/**
-	 * @expectedException Model_UserLogoutException
-	 * @expectedExceptionMessage No logged in user to logout
-	 */
-	public function test_logout_when_not_logged_in_errors()
-	{
-		Model_User::logout();
 	}
 
 	/**
@@ -194,7 +163,7 @@ class Tests_User extends \Fuel\Core\TestCase
 		));
 	}
 
-	public function test_logining_twice_in_a_row_doesnt_break()
+	public function test_as_object()
 	{
 		$user = Model_User::init(array(
 			'name' => 'Barry',
@@ -203,14 +172,9 @@ class Tests_User extends \Fuel\Core\TestCase
 			'password_confirm' => 'password',
 		));
 
-		Model_User::login(array(
-			'email'=>'email@email.com',
-			'password'=>'password'
-		));
+		$to_object = $user->to_object();
 
-		Model_User::login(array(
-			'email'=>'email@email.com',
-			'password'=>'password'
-		));
+		$this->assertEquals('Barry', $to_object->name);
+		$this->assertObjectHasAttribute('login_hash', $to_object);
 	}
 }

@@ -57,27 +57,18 @@ class Model_Member extends \Orm\Model
 		return $member;		
 	}
 
-	public static function login($params)
+	public static function get_login_hash_for_login_details($params)
 	{
 		try{
-			Model_User::login($params);
+			return Model_User::get_login_hash_for_login_details($params);
 		}catch(Model_UserException $e){
 			throw new Model_MemberUserException($e->getMessage());
 		}
 	}
 
-	public static function logout()
+	public static function get_by_login_hash($hash)
 	{
-		try{
-			Model_User::logout();
-		}catch(Model_UserException $e){
-			throw new Model_MemberUserException($e->getMessage());
-		}
-	}	
-
-	public static function get_logged_in_member()
-	{
-		$user = Model_User::get_logged_in_user();
+		$user = Model_User::get_by_login_hash($hash);
 		return $user->member;
 	}
 

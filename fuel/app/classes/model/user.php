@@ -3,7 +3,7 @@
 class Model_UserException extends Exception {}
 
 class Model_UserLoginException extends Model_UserException {}
-class Model_UserLogoutException extends Model_UserException {}
+class Model_UserHashException extends Model_UserException {}
 class Model_UserNameException extends Model_UserException {}
 class Model_UserEmailException extends Model_UserException {}
 class Model_UserPasswordException extends Model_UserException {}
@@ -100,7 +100,7 @@ class Model_User extends \Orm\Model
 		return $user;
 	}
 
-	public static function login($params)
+	public static function get_login_hash_for_login_details($params)
 	{
 		$successfull_login = Auth::login(
 			$params['email'],
@@ -110,23 +110,34 @@ class Model_User extends \Orm\Model
 		if(!$successfull_login){
 			throw new Model_UserLoginException('Invalid Email/Password combination');
 		}
+
+		$user = self::get_user_by_email(Auth::get_screen_name());
+		$user->login_hash = Auth::create_login_hash();
+		$user->save();
+
+		return $user->login_hash;
 	}
 
-	public static function get_logged_in_user()
+	public static function get_by_login_hash($hash)
 	{
-		$user = self::get_user_by_email(Auth::get_screen_name());
-	
+		$user = self::find()
+			->where('login_hash', '=', $hash)
+			->get_one();
+
 		if(!$user){
-			throw new Model_UserLoginException('No logged in user');
+			throw new Model_UserHashException("The user is logged out. Please login in again.");
 		}
+
 		return $user;
 	}
 
-	public static function logout()
+	public function to_object()
 	{
-		if(Auth::get_screen_name()){
-			return Auth::logout();
-		}
-		throw new Model_UserLogoutException("No logged in user to logout");
+		$obj = (object)array();
+
+		$obj->name = $this->name;
+		$obj->login_hash = $this->login_hash;
+
+		return $obj;
 	}
 }

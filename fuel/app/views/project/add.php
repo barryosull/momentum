@@ -2,9 +2,8 @@
 	<div class="span3"></div>
 	<div class="span6">
 		<h3>Add Project</h3> 
-		<form action="/project/add_post" method="post">
-			<input type="text" name="name">
-			<input class="btn" type="submit" value="Add">
+			<input type="text" name="project_name">
+			<a class="btn" href="/project/add_post">Add</a>
 		</form>
 	</div>
 </div>

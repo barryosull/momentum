@@ -135,4 +135,25 @@ class Tests_Project extends \Fuel\Core\TestCase
 			$total_time
 		);
 	}
+
+	public function test_to_object()
+	{
+		$project = Model_Project::init(array(
+			'name' => 'Project name'
+		));
+		$time = Model_PeriodOfTime::init(array(
+			'minutes' => 20
+		));
+		$time2 = Model_PeriodOfTime::init(array(
+			'minutes' => 30
+		));
+		$project->add_periodoftime($time);
+		$project->add_periodoftime($time2);
+
+		$obj = $project->to_object();
+
+		$this->assertEquals($project->id, $obj->id);
+		$this->assertEquals($project->name, $obj->name);
+		$this->assertEquals($project->get_totaltime(), $obj->totaltime);
+	}
 }

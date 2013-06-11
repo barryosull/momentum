@@ -1,35 +1,19 @@
 <?php
 
-class Controller_Auth extends BaseController_Template
+class Controller_Auth extends BaseController_Rest
 {
-	public function action_index()
-	{
-		$this->action_login();
-	}
-
-	public function action_login()
-	{
-		$this->template->body = View::forge('auth/login');
-	}
-
-	public function action_login_post()
+	public function post_login()
 	{
 		try{
-			Model_Member::login(array(
+			$hash = Model_Member::get_login_hash_for_login_details(array(
 				'email'=>Input::post('email'),
 				'password'=>Input::post('password')
 			));
+			$user = Model_Member::get_by_login_hash($hash)->user;
+			$this->respond($user->to_object());
 		}catch(Model_MemberException $e){
-			Session::set_flash('error', $e->getMessage());
-			Response::redirect('/auth/login');
+			$this->error_respond($e->getMessage());
 		}
-
-		Response::redirect('/periodoftime/view');
-	}
-
-	public function action_register()
-	{
-		$this->template->body = View::forge('auth/register');
 	}
 
 	public function action_register_post()
@@ -54,7 +38,7 @@ class Controller_Auth extends BaseController_Template
 		Response::redirect('/project/add');
 	}
 
-	public function action_logout()
+	public function get_logout()
 	{
 		Model_Member::logout();
 		Response::redirect('/project/add');

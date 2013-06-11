@@ -35,14 +35,6 @@ class Tests_Member extends \Fuel\Core\TestCase
 		));
 	}
 
-	/**
-	 * @expectedException Model_MemberUserException
-	 */
-	public function test_logout_exceptions()
-	{
-		Model_Member::logout();
-	}
-
 	public function test_create_member()
 	{
 		$user = $this->member->user;
@@ -53,14 +45,14 @@ class Tests_Member extends \Fuel\Core\TestCase
 		);
 	}	
 
-	public function test_get_logged_in_member()
+	public function test_get_logged_in_member_by_hash()
 	{
-		Model_Member::login(array(
+		$hash = Model_Member::get_login_hash_for_login_details(array(
 			'email'=>'email@email.com',
 			'password'=>'password'
 		));
 
-		$member = Model_Member::get_logged_in_member();
+		$member = Model_Member::get_by_login_hash($hash);
 
 		$this->assertEquals(
 			$this->member->id,
@@ -73,45 +65,10 @@ class Tests_Member extends \Fuel\Core\TestCase
 	 */
 	public function test_login_exceptions_are_returned_as_member_exception()
 	{
-		Model_Member::login(array(
+		Model_Member::get_login_hash_for_login_details(array(
 			'email'=>'email@email.com',
 			'password'=>'not the right password'
 		));
-	}
-
-	public function test_logout()
-	{
-		Model_Member::login(array(
-			'email'=>'email@email.com',
-			'password'=>'password'
-		));
-
-		Model_Member::logout();
-	}
-
-	public function test_login_while_logged_in_causes_member_changeover()
-	{
-		Model_Member::login(array(
-			'email'=>'email@email.com',
-			'password'=>'password'
-		));
-		$changeover_member = Model_Member::init(array(
-			'name'=>'name2',
-			'email'=>'email2@email.com',
-			'password'=>'password',
-			'password_confirm'=>'password',
-		));
-
-		Model_Member::login(array(
-			'email'=>'email2@email.com',
-			'password'=>'password'
-		));
-
-		$member_logged_in = Model_Member::get_logged_in_member();
-		$this->assertEquals(
-			$changeover_member->id,
-			$member_logged_in->id
-		);
 	}
 
 	/**

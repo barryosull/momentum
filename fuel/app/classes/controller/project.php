@@ -1,21 +1,15 @@
 <?php
 
-class Controller_Project extends BaseController_Loggedin
+class Controller_Project extends BaseController_ValidMember
 {
-	public function action_view()
+	public function get_list()
 	{
 		$projects = $this->member->get_all_projects();
-		$this->template->body = View::forge('project/view', array(
-			'projects' => $projects
-		));
+		$objs = $this->convert_objects($projects);
+		$this->respond($objs);
 	}
-
-	public function action_add()
-	{
-		$this->template->body = View::forge('project/add');
-	}
-
-	public function action_add_post()
+	
+	public function post_list()
 	{
 		try{
 			$project = Model_Project::init(array(
@@ -23,20 +17,20 @@ class Controller_Project extends BaseController_Loggedin
 			));
 			$this->member->add_project($project);
 		}catch(Model_MemberException $e){
-			Session::set_flash('error', $e->getMessage());
-			Response::redirect('/project/add');
+			return $this->error_respond($e->getMessage());
 		}
-
-		Response::redirect('/project/view');
+		$this->respond();
 	}
-
+	
 	public function action_delete($id)
 	{
 		$project = $this->member->get_project_by_id($id);
+		$project_data_before_deletion = $project->to_object();
 		$project->delete();
-		Response::redirect('/project/view');
+		$this->respond($project_data_before_deletion);
 	}
 
+	/*
 	public function action_timetotals($start_date = '')
 	{
 		if($start_date != ''){
@@ -63,4 +57,5 @@ class Controller_Project extends BaseController_Loggedin
 		);
 		$this->template->body = View::forge('project/timetotals', $data);
 	}
+	*/
 }

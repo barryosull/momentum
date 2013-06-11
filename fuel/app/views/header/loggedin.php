@@ -9,13 +9,13 @@
                 	<span class="icon-bar"></span>
             	</a>
 			    <ul class="menu nav nav-collapse collapse navbar-responsive-collapse">
-					<li class="<?=($active=='periodoftime/view')?'active':''?>"><a href="/periodoftime/view">Todays Times</a></li>
-					<li class="<?=($active=='project/view')?'active':''?>"><a href="/project/view">View Projects</a></li>
-					<li class="<?=($active=='project/timetotals')?'active':''?>"><a href="/project/timetotals">Project times</a></li>
+					<li><a href="/periodoftime/view">Todays Times</a></li>
+					<li><a href="/project/view">View Projects</a></li>
+					<li><a href="/project/timetotals">Project times</a></li>
 				</ul>
 				<ul class="nav pull-right">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$member->user->name?> <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="username"></span> <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                           	<li><a href="/auth/logout">Logout</a></li>
                         </ul>

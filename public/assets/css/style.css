@@ -8,3 +8,19 @@ td {
 	padding: 10px;
 	margin-top: 10px;
 }
+
+#error_box {
+	display: none;
+}
+
+#success_box {
+	display: none;
+}
+
+#templates {
+	display: none;
+}
+
+.row_template{
+	display: none;
+}

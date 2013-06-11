@@ -7,36 +7,45 @@
 </head>
 <body>
 <div class="container">
-<?=$header?>
-<?$error = Session::get_flash('error');
-if($error):?>
-	<div class="row-fluid">
+	<div id="header"></div>
+	<div id="error_box" class="row-fluid">
 		<div class="span12">
 			<div class="alert alert-error">
 		  		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		  		<strong>Error!</strong> <?=$error?>
+		  		<strong>Error!</strong> <span class="error_message"></span>
 			</div>
 		</div>
 	</div>
-<?endif;?>
-<?$message = Session::get_flash('message');
-if($message):?>
-	<div class="row-fluid">
+	<div id="success_box" class="row-fluid">
 		<div class="span12">
 			<div class="alert alert-success">
 		  		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		  		<?=$message?>
+		  		<span class="success_message"></span>
 			</div>
 		</div>
 	</div>
-<?endif;?>
-<?=$body?>
-<?=$footer?>
+	<div id="content"></div>
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="footer">
+				<p>Developed by Barry O Sullivan <a href="http://twitter.com/barryosull" target="_blank">@barryosull</a></p>
+			</div>
+		</div>
+	</div>
+
+</div>
+<div id="templates">
+<?foreach($views as $view):
+	$view_formatted = str_replace('/', '_', $view)?>
+	<div id="<?=$view_formatted?>_template">
+		<?=View::forge($view)?>
+	</div>
+<?endforeach;?>
 </div>
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
 <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/assets/js/highcharts.js"></script>
 <script type="text/javascript" src="/assets/js/charts_from_tables.js"></script>
-
+<script type="text/javascript" src="/assets/js/app.js"></script>
 </body>
 </html>
