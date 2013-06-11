@@ -109,6 +109,22 @@ Controllers.Periodoftime.added = function(json)
 	Controllers.Periodoftime.view();
 }
 
+Controllers.Periodoftime.delete = function(id)
+{
+	$.get(
+		'/periodoftime/delete/'+id+'.json?hash='+user.login_hash, 
+		Controllers.Periodoftime.deleted
+	);
+}
+
+Controllers.Periodoftime.deleted = function(json)
+{
+	if(json.error){
+		return Views.Error.show(json.error);	
+	}
+	Views.Periodoftime.delete(json.data);
+}
+
 Controllers.Project = {};
 
 Controllers.Project.view = function()
@@ -244,7 +260,7 @@ Views.Periodoftime.view = function(times)
 	$.each(times, function(key, time){
 		
 		var row = $("#content .times .row_template").clone();
-		row.attr('id', 'times_'+time.id);
+		row.attr('id', 'time_'+time.id);
 		row.find('.project').html(time.project.name);
 		row.find('.time').html(Helpers.Time.mins_to_string(time.minutes));
 		
@@ -275,6 +291,11 @@ Views.Periodoftime.add = function(projects)
 		console.log(option);
 		$("#content select[name=project_id]").append(option);
 	});
+}
+
+Views.Periodoftime.delete = function(project)
+{
+	$('#time_'+project.id).fadeOut();
 }
 
 function init()

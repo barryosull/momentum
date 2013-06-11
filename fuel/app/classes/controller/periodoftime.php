@@ -31,7 +31,8 @@ class Controller_Periodoftime extends BaseController_ValidMember
 	public function action_delete($id)
 	{
 		$time = $this->member->get_periodotime_by_id($id);
+		$time_data_before_deletion = $time->to_object();
 		$time->delete();
-		Response::redirect('/periodoftime/view');
+		$this->respond($time_data_before_deletion);
 	}
 }

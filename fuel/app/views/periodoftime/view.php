@@ -16,7 +16,7 @@
 				<tr class="row_template">
 					<td class="project"></td>
 					<td class="time"></td>
-					<td><a class="btn" href="/periodoftime/delete/">Delete</a></td>
+					<td><a class="btn" href="/periodoftime/delete">Delete</a></td>
 				</tr>
 			</tbody>
 			<tfoot>
