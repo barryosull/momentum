@@ -60,8 +60,8 @@ Models.post = function(url, data, callback)
 		data,
 		function(json){
 			if(json.error){
-				if(json.type == 'hash'){
-					Views.Error.show(json.error);	
+				Views.Error.show(json.error);
+				if(json.type == 'hash'){	
 					return Controllers.Auth.logout();
 				}
 			}
