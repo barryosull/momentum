@@ -8,7 +8,6 @@
 		<br/>
 		<table class="table table-condensed table-bordered table-striped">
 			<thead>
-				<th>Date</th>
 				<th>Project</th>
 				<th>Time</th>
 				<th>Options</th>
@@ -16,8 +15,7 @@
 			<tbody>
 				<?$total = 0;?>
 				<?foreach($times as $periodoftime):?>
-					<tr>
-						<td><?=$day_date->format('d/m/Y')?></td>
+					<tr>					
 						<td><?=$periodoftime->project->name?></td>
 						<td><?=Model_TimeFormat::mins_to_string($periodoftime->minutes)?></td>
 						<td><a class="btn" href="/periodoftime/delete/<?=$periodoftime->id?>">Delete</a></td>
