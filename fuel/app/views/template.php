@@ -11,7 +11,7 @@
 	<div id="error_box" class="row-fluid">
 		<div class="span12">
 			<div class="alert alert-error">
-		  		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		  		
 		  		<strong>Error!</strong> <span class="error_message"></span>
 			</div>
 		</div>
@@ -19,7 +19,7 @@
 	<div id="success_box" class="row-fluid">
 		<div class="span12">
 			<div class="alert alert-success">
-		  		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		  		
 		  		<span class="success_message"></span>
 			</div>
 		</div>

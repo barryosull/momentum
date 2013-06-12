@@ -17,6 +17,7 @@ class Controller_Start extends Controller
 			'periodoftime/add',
 			'periodoftime/view',
 			'project/add',
+			'project/timetotals',	
 			'project/view',	
 		);
 

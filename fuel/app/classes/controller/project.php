@@ -5,7 +5,7 @@ class Controller_Project extends BaseController_ValidMember
 	public function get_list()
 	{
 		$projects = $this->member->get_all_projects();
-		$objs = $this->convert_objects($projects);
+		$objs = $this->convert_models_to_data_objects($projects);
 		$this->respond($objs);
 	}
 	
@@ -30,7 +30,6 @@ class Controller_Project extends BaseController_ValidMember
 		$this->respond($project_data_before_deletion);
 	}
 
-	/*
 	public function action_timetotals($start_date = '')
 	{
 		if($start_date != ''){
@@ -41,21 +40,28 @@ class Controller_Project extends BaseController_ValidMember
 			$week_start = new DateTime('Sunday last week');
 			$week_end = new DateTime('Sunday this week');
 		}
-		
-		$last_week_start = clone $week_start;
-		$last_week_start->modify('-7 days');
-		
-		$next_week_start = clone $week_start;
-		$next_week_start->modify('+7 days');
 
-		$data = array(
-			'projects'=>$this->member->get_all_projects(),
-			'week_start'=>$week_start,
-			'week_end'=>$week_end,
-			'last_week_start'=>$last_week_start,
-			'next_week_start'=>$next_week_start,
-		);
-		$this->template->body = View::forge('project/timetotals', $data);
+		$week_prev = clone $week_start;
+		$week_prev->modify('-1 weeks');
+
+		$week_next = clone $week_start;
+		$week_next->modify('+1 weeks');
+		
+		$result = (object)array();
+		$result->week_start = $week_start->format('d/m/Y');
+		$result->week_end = $week_end->format('d/m/Y');
+		$result->week_prev = $week_prev->format('Y-m-d');
+		$result->week_next = $week_next->format('Y-m-d');
+		$result->projects = array();
+
+		$projects = $this->member->get_all_projects();
+		
+		foreach($projects as $project){
+			$obj = $project->to_object();
+			$obj->timetotal_for_range = $project->get_totaltime_for_date_range($week_start, $week_end);
+			$result->projects[] = $obj;
+		}
+
+		$this->respond($result);
 	}
-	*/
 }

@@ -24,3 +24,7 @@ td {
 .row_template{
 	display: none;
 }
+
+.project_times_table {
+	display: none;
+}

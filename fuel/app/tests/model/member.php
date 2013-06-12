@@ -156,6 +156,7 @@ class Tests_Member extends \Fuel\Core\TestCase
 		$time = Model_PeriodOfTime::init(array(
 			'minutes' => 20
 		));
+
 		$project->add_periodoftime($time);
 		$this->member->add_project($project);
 
@@ -166,6 +167,27 @@ class Tests_Member extends \Fuel\Core\TestCase
 		
 		$time_again = current($times);
 		$this->assertEquals($time, $time_again);
+	}
+
+	public function test_get_all_period_of_time_by_date_excludes_by_date()
+	{
+		$project = Model_Project::init(array(
+			'name'=>'project'
+		));
+		$time = Model_PeriodOfTime::init(array(
+			'minutes' => 20
+		));
+		$time->created_at = time() - (86400*2);
+		
+		$project->add_periodoftime($time);
+		$this->member->add_project($project);
+
+		$datetime = new DateTime();
+		$date = new DateTime($datetime->format('Y-m-d'));
+
+		$times = $this->member->get_all_period_of_time_by_date($date);
+		
+		$this->assertEquals(0, count($times));
 	}
 
 	public function test_get_project_by_id()

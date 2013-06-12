@@ -2,15 +2,6 @@
 
 class BaseController_Rest extends Controller_Rest
 {
-	protected function convert_objects($objects)
-	{
-		$result = array();
-		foreach($objects as $obj){
-			$result[] = $obj->to_object();
-		}
-		return $result;
-	}
-
 	protected function respond($data = array())
 	{
 		$result = (object)array();
@@ -24,5 +15,14 @@ class BaseController_Rest extends Controller_Rest
 		$result = (object)array();
 		$result->error = $error;
 		$this->response($result);
+	}
+
+	protected function convert_models_to_data_objects($objects)
+	{
+		$result = array();
+		foreach($objects as $obj){
+			$result[] = $obj->to_object();
+		}
+		return $result;
 	}
 }

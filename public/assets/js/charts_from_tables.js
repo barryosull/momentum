@@ -1,48 +1,32 @@
-(function(){
+var Chart = {};
+Chart.render_table_chart = function($table, type)
+{
+		units = $table.find('th:first').text();
+		var  options = {
+        chart: {
+            renderTo: $table.attr('data-chart-id'),
+            type: type
+        },
+        title: {
+            text: ''
+        },
+        xAxis: {
+        },
+        yAxis: {
+            title: {
+                text: units
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                return '<b>'+ this.series.name +'</b><br/>'+
+                    this.y +' ('+ this.x+')';
+            }
+        }
+    };
 
-	function render_table_chart($table, type)
-	{
-   		units = $table.find('th:first').text();
-   		var  options = {
-	        chart: {
-	            renderTo: $table.attr('data-chart-id'),
-	            type: type
-	        },
-	        title: {
-	            text: ''
-	        },
-	        xAxis: {
-	        },
-	        yAxis: {
-	            title: {
-	                text: units
-	            }
-	        },
-	        tooltip: {
-	            formatter: function() {
-	                return '<b>'+ this.series.name +'</b><br/>'+
-	                    this.y +' ('+ this.x+')';
-	            }
-	        }
-	    };
-
-    	Highcharts.render_table($table, options);
-	}
-
-	$(function()
-	{
-	   	$('table.view_as_bar_chart').each(function() 
-	   	{
-	   		render_table_chart($(this), 'column');	
-	    }); 
-
-	    $('table.view_as_line_chart').each(function() 
-	   	{ 
-	   		render_table_chart($(this), 'line');	
-	    });
-	});
-
-})();
+	Highcharts.render_table($table, options);
+}
 
 Highcharts.render_table = function($table, options) 
 {

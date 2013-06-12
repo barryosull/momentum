@@ -16,7 +16,7 @@ class Controller_Auth extends BaseController_Rest
 		}
 	}
 
-	public function action_register_post()
+	public function post_register()
 	{
 		try{
 			$member = Model_Member::init(array(
@@ -25,22 +25,10 @@ class Controller_Auth extends BaseController_Rest
 				'password'=>Input::post('password'),
 				'password_confirm'=>Input::post('password_confirm')
 			));
+			$this->post_login();
+
 		}catch(Model_MemberException $e){
-			Session::set_flash('error', $e->getMessage());
-			Response::redirect('/auth/register');
+			$this->error_respond($e->getMessage());
 		}
-
-		Model_Member::login(array(
-			'email'=>Input::post('email'),
-			'password'=>Input::post('password')
-		));
-
-		Response::redirect('/project/add');
-	}
-
-	public function get_logout()
-	{
-		Model_Member::logout();
-		Response::redirect('/project/add');
 	}
 }

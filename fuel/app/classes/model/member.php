@@ -7,7 +7,6 @@ class Model_MemberUserException extends Model_MemberException {}
 class Model_MemberProjectMismatchException extends Model_MemberException {}
 class Model_MemberProjectNotFoundException extends Model_MemberException {}
 class Model_MemberProjectDuplicateException extends Model_MemberException {}
-
 class Model_MemberPeriodoftimeNotFoundException extends Model_MemberException {}
 class Model_MemberPeriodoftimeMismatchException extends Model_MemberException {}
 
@@ -49,9 +48,7 @@ class Model_Member extends \Orm\Model
 		}
 
 		$member = new self();
-
 		$member->user = $user;
-
 		$member->save();
 
 		return $member;		
@@ -102,10 +99,10 @@ class Model_Member extends \Orm\Model
 
 	public function get_all_projects()
 	{
-		return $this->sort_project_alphabetically($this->project);
+		return $this->sort_projects_alphabetically($this->project);
 	}
 
-	private function sort_project_alphabetically($projects)
+	private function sort_projects_alphabetically($projects)
 	{
 		$projects = array();
 		foreach($this->project as $project){
@@ -124,13 +121,15 @@ class Model_Member extends \Orm\Model
 		$timestamp = $date->getTimestamp();
 		$day_after_timestamp = $timestamp + 86400;
 		
-		$query = Model_PeriodOfTime::find()					
+		$query = Model_PeriodOfTime::find()		
 					->where('created_at', '>=', $timestamp)
 					->where('created_at', '<', $day_after_timestamp);
-
+	
+		$query->where_open();
 		foreach($this->project as $project){
 			$query->or_where('project_id', $project->id);
 		}
+		$query->where_close();
 
 		$times = $query->get();	
 

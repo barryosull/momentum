@@ -4,11 +4,9 @@ class Controller_Periodoftime extends BaseController_ValidMember
 {
 	public function get_list()
 	{
-		$datetime = new DateTime();
-		$date = new DateTime($datetime->format('Y-m-d'));
-
+		$date = new DateTime('today');
 		$times = $this->member->get_all_period_of_time_by_date($date);
-		$objs = $this->convert_objects($times);
+		$objs = $this->convert_models_to_data_objects($times);
 		$this->respond($times);
 	}
 
