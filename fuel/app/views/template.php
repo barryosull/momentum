@@ -25,6 +25,7 @@
 		</div>
 	</div>
 	<div id="content"></div>
+	<div id="previous_content"></div>
 	<div class="row-fluid">
 		<div class="span12">
 			<div class="footer">

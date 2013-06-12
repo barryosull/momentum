@@ -13,6 +13,15 @@ class BaseController_Rest extends Controller_Rest
 	protected function error_respond($error = array())
 	{
 		$result = (object)array();
+		$result->type = 'model';
+		$result->error = $error;
+		$this->response($result);
+	}
+
+	protected function hash_error_respond($error = array())
+	{
+		$result = (object)array();
+		$result->type = 'hash';
 		$result->error = $error;
 		$this->response($result);
 	}

@@ -125,7 +125,7 @@ class Model_User extends \Orm\Model
 			->get_one();
 
 		if(!$user){
-			throw new Model_UserHashException("The user is logged out. Please login in again.");
+			throw new Model_UserHashException("The user is logged out. Please login again.");
 		}
 
 		return $user;

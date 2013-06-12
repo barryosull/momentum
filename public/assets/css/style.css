@@ -28,3 +28,15 @@ td {
 .project_times_table {
 	display: none;
 }
+
+#hidden_content {
+	display: none;
+}
+
+.menu_btn {
+	color: #fff;
+}
+
+.menu_btn:hover {
+	color: #aaa;
+}

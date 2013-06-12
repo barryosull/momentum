@@ -12,7 +12,12 @@ class Controller_Periodoftime extends BaseController_ValidMember
 
 	public function post_list()
 	{
-		$project = $this->member->get_project_by_id(Input::post('project_id'));
+		try{
+			$project = $this->member->get_project_by_id(Input::post('project_id'));
+		}catch(Model_MemberException $e){
+			return $this->error_respond($e->getMessage());
+		}
+
 		$minutes = Input::post('minutes');
 		try{
 			$time = Model_PeriodOfTime::init(array(

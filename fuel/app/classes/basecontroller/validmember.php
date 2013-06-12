@@ -12,8 +12,8 @@ class BaseController_ValidMember extends BaseController_Rest
 
 		try{
 			$this->member = Model_Member::get_by_login_hash($hash);
-		}catch(Model_UserLoginException $e){
-			$this->error_respond($e->getMessage());
+		}catch(Model_UserHashException $e){
+			Response::redirect('/auth/hash_error.json');
 		}
 	}
 }

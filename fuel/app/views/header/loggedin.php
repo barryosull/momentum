@@ -3,10 +3,8 @@
 		<div class="navbar">
 		  	<div class="navbar-inner">
 			    <a class="brand" href="/">Momentum</a>
-			    <a href="#" class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
-                	<span class="icon-bar"></span>
-                	<span class="icon-bar"></span>
-                	<span class="icon-bar"></span>
+			    <a href="#" class="menu_btn btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+                	Menu
             	</a>
 			    <ul class="menu nav nav-collapse collapse navbar-responsive-collapse">
 					<li><a href="/periodoftime/view">Todays Times</a></li>

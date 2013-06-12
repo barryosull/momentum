@@ -31,4 +31,9 @@ class Controller_Auth extends BaseController_Rest
 			$this->error_respond($e->getMessage());
 		}
 	}
+
+	public function get_hash_error()
+	{
+		$this->hash_error_respond('Session timed out. Please login again');
+	}
 }

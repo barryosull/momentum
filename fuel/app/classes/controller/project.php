@@ -16,7 +16,7 @@ class Controller_Project extends BaseController_ValidMember
 				'name' => Input::post('name')
 			));
 			$this->member->add_project($project);
-		}catch(Model_MemberException $e){
+		}catch(Model_ProjectException $e){
 			return $this->error_respond($e->getMessage());
 		}
 		$this->respond();
