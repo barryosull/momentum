@@ -29,7 +29,7 @@
 	<div class="row-fluid">
 		<div class="span12">
 			<div class="footer">
-				<p>Developed by Barry O Sullivan <a href="http://twitter.com/barryosull" target="_blank">@barryosull</a></p>
+				<p>Developed by Barry O Sullivan <a class="external_link" href="http://twitter.com/barryosull" target="_blank">@barryosull</a></p>
 			</div>
 		</div>
 	</div>

@@ -527,6 +527,11 @@ App.init = function()
 App.handle_click = function(e)
 {
 	$this = $(this);
+
+	if($this.hasClass('external_link')){
+		window.location.href = $this.attr('href');
+	}
+
 	e.preventDefault();
 	url = $this.attr('href');
 	url_parts = url.split('/');
