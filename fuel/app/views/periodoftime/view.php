@@ -24,7 +24,6 @@
 				<?endforeach;?>
 				<tr>
 					<td></td>
-					<td></td>
 					<td style="padding-top:20px"><?=Model_TimeFormat::mins_to_string($total)?></td>
 					<td></td>
 				</tr>
