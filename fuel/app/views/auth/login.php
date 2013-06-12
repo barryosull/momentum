@@ -4,10 +4,10 @@
 		<h3>Login</h3> 
 		<table border="0">
 			<tr>
-				<td>Email Address: </td><td><input type="text" value="test@test.com" name="email"></td>
+				<td>Email Address: </td><td><input type="text" name="email"></td>
 			</tr>
 			<tr>
-				<td>Password: </td><td><input type="password" value="password" name="password"></td>
+				<td>Password: </td><td><input type="password" name="password"></td>
 			</tr>
 			<tr>
 				<td><a href="/auth/register">Not a member? Register here.</a></td>
