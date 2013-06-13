@@ -64,6 +64,7 @@ Models.post = function(url, data, callback)
 				if(json.type == 'hash'){	
 					return Controllers.Auth.logout();
 				}
+				return false;
 			}
 			callback(json);
 		}
@@ -88,6 +89,29 @@ Models.User.register = function(data, callback)
 		data,
 		callback
 	);
+}
+
+Models.User.get_local_user = function()
+{
+	var user_json = localStorage.user;
+
+	if(!user_json || user_json=='undefined'){
+		return undefined;
+	}
+	console.log(typeof(user_json));
+
+	var local_user = $.parseJSON(user_json);
+	return local_user;
+}
+
+Models.User.set_local_user = function(user)
+{
+	localStorage.user = JSON.stringify(user);
+}
+
+Models.User.remove_local_user = function()
+{
+	localStorage.removeItem('user');
 }
 
 Models.Periodoftime = {};
@@ -158,8 +182,14 @@ Controllers.Auth = {};
 
 Controllers.Auth.login = function()
 {
-	Views.Page.change('auth_login');
-	Views.Header.login();
+	user = Models.User.get_local_user();
+	if(user){
+		Views.Header.loggedin();	
+		Controllers.Periodoftime.view();
+	}else{
+		Views.Page.change('auth_login');
+		Views.Header.login();
+	}
 }
 
 Controllers.Auth.login_post = function(e)
@@ -175,6 +205,7 @@ Controllers.Auth.login_post = function(e)
 Controllers.Auth.got_user_info = function(json)
 {
 	user = json.data;
+	Models.User.set_local_user(user);
 	Views.Header.loggedin();	
 	Controllers.Periodoftime.view();
 }
@@ -182,6 +213,7 @@ Controllers.Auth.got_user_info = function(json)
 Controllers.Auth.logout = function(e)
 {
 	user = undefined;
+	Models.User.remove_local_user();
 	Controllers.Auth.login();
 }
 
@@ -282,7 +314,7 @@ Controllers.Periodoftime.delete = function(id)
 
 Controllers.Periodoftime.deleted = function(json)
 {
-	Views.Periodoftime.delete(json.data);
+	Controllers.Periodoftime.view();
 }
 
 Controllers.Project = {};
