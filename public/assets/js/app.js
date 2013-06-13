@@ -10,8 +10,8 @@ Helpers.Time = {};
 Helpers.Time.mins_to_string = function(mins)
 {
 	mins = new Number(mins);
-	mins = mins.toFixed(0);
-	var hours = (mins/60).toFixed(0);
+	mins = Math.floor(mins);
+	var hours = Math.floor(mins/60);
 	var mins_remainder = (mins%60);
 
 	if(hours == 0){
@@ -481,7 +481,7 @@ Views.Periodoftime.view = function(times)
 		row.attr('id', 'time_'+time.id);
 		row.find('.project').html(time.project.name);
 		row.find('.time').html(Helpers.Time.mins_to_string(time.minutes));
-		
+
 		var href = row.find('a').attr('href')+'/'+time.id;
 		row.find('a').attr('href', href);
 
