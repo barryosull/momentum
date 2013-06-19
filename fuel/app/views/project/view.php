@@ -16,7 +16,7 @@
 					<tr>
 						<td><?=$project->name?></td>
 						<td><?=Model_TimeFormat::mins_to_string($project->get_totaltime())?></td>
-						<td><a class="btn" href="/project/delete/<?=$project->id?>">Delete</a></td>
+						<td><a class="btn btn-danger delete" href="/project/delete/<?=$project->id?>">Delete</a></td>
 					</tr>
 				<?endforeach;?>
 			</tbody>

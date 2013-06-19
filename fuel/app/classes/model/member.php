@@ -137,9 +137,11 @@ class Model_Member extends \Orm\Model
 					->where('created_at', '>=', $timestamp)
 					->where('created_at', '<', $day_after_timestamp);
 
+		$query->where_open();		
 		foreach($this->project as $project){
 			$query->or_where('project_id', $project->id);
 		}
+		$query->where_close();
 
 		$times = $query->get();	
 

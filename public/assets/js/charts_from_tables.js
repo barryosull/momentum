@@ -3,10 +3,19 @@
 	function render_table_chart($table, type)
 	{
    		units = $table.find('th:first').text();
-   		var  options = {
+   		var  options = get_default_chart_options_for(type);
+	  
+	  	options.chart.renderTo = $table.attr('data-chart-id');
+	    options.yAxis.title.text = units;
+	         
+    	Highcharts.render_table($table, options);
+	}
+
+	function get_default_chart_options_for(type)
+	{
+		var default_options = {
 	        chart: {
-	            renderTo: $table.attr('data-chart-id'),
-	            type: type
+	            type: ''
 	        },
 	        title: {
 	            text: ''
@@ -15,7 +24,7 @@
 	        },
 	        yAxis: {
 	            title: {
-	                text: units
+	                text: ''
 	            }
 	        },
 	        tooltip: {
@@ -26,7 +35,22 @@
 	        }
 	    };
 
-    	Highcharts.render_table($table, options);
+		if(type=='column'){
+			default_options.chart.type = type;
+		}else if(type=='line'){
+			default_options.chart.type = type;
+		}else if(type=='stacked'){
+			default_options.chart.type = 'column';
+			default_options.plotOptions = {
+                column: {
+                    stacking: 'normal'
+                }
+            };
+		}else{
+			return alert('Chart type of "'+type+'" is unknown');
+		}
+
+		return default_options;
 	}
 
 	$(function()
@@ -40,6 +64,11 @@
 	   	{ 
 	   		render_table_chart($(this), 'line');	
 	    });
+
+	    $('table.view_as_stacked_bar_chart').each(function() 
+	   	{
+	   		render_table_chart($(this), 'stacked');	
+	    }); 
 	});
 
 })();
