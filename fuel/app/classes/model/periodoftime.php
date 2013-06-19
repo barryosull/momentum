@@ -50,11 +50,22 @@ class Model_PeriodOfTime extends \Orm\Model
 		$time->member_id = 0;
 		$time->save();
 
+		if(isset($params['date'])){
+			$time->created_at = $params['date']->getTimestamp();
+			$time->save();
+		}
+
 		return $time;
 	}
 
 	public static function get_by_id($id)
 	{
 		return self::find()->where('id', '=', $id)->get_one();
+	}
+
+	public function get_created_at()
+	{	
+		$date = new DateTime('@'.$this->created_at);
+		return $date;
 	}
 }
