@@ -35,6 +35,20 @@ class Tests_PeriodOfTime extends \Fuel\Core\TestCase
 		);
 	}
 
+	public function test_create_date_can_be_set()
+	{
+		$date = new DateTime('2010-01-01');
+
+		$time = Model_PeriodOfTime::init(array(
+			'minutes' => 20,
+			'date'=> $date
+		));
+
+		$this->assertEquals(
+			$date->getTimestamp(),
+			$time->get_created_at()->getTimestamp()
+		);
+	}
 
 	/**
 	 * @expectedException Model_PeriodOfTimeException

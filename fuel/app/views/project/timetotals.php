@@ -9,19 +9,27 @@
 		?>
 		<h4>Week <?=$week_start->format('d/m/Y')?> - <?=$day_before_week_end->format('d/m/Y')?></h4>
 		<div id="project_times" style="height: 250px"></div>
-		<table data-chart-id="project_times" class="table table-bordered table-condensed view_as_bar_chart">
+		<table data-chart-id="project_times" class="table table-bordered table-condensed view_as_stacked_bar_chart">
 			<thead>
 				<th>Times</th>
 				<?foreach($projects as $project):?>
 					<th><?=$project->name?></th>
 				<?endforeach;?>
 			</thead>
-			<tr>
-				<th></th>
-				<?foreach($projects as $project):?>
-					<th><?=$project->get_totaltime_for_date_range($week_start, $week_end)?></th>
-				<?endforeach;?>
-			</tr>
+			<tbody>
+				<?for($day = clone $week_start; $day < $week_end; $day->modify('+1 days')):?>
+					<tr>
+						<?
+						$next_day = clone $day;
+						$next_day->modify('+1 days');
+						?>
+						<th><?=$day->format('D')?></th>
+						<?foreach($projects as $project):?>
+							<td><?=$project->get_totaltime_for_date_range($day, $next_day)?></td>
+						<?endforeach;?>
+					</tr>
+				<?endfor;?>
+			</tbody>
 		</table>
 		<a href="/project/timetotals/<?=$last_week_start->format('Y-m-d')?>" class="btn pull-left">&lt;&lt; Prev</a>
 		<a href="/project/timetotals/<?=$next_week_start->format('Y-m-d')?>" class="btn pull-right">Next &gt;&gt;</a>

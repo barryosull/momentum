@@ -4,6 +4,7 @@
 <link type="text/css" rel="stylesheet" href="/assets/css/bootstrap.css">
 <link type="text/css" rel="stylesheet" href="/assets/css/bootstrap-responsive.css">
 <link type="text/css" rel="stylesheet" href="/assets/css/style.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/jquery-ui-1.10.3.custom.min.css">
 </head>
 <body>
 <div class="container">
@@ -37,6 +38,8 @@ if($message):?>
 <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/assets/js/highcharts.js"></script>
 <script type="text/javascript" src="/assets/js/charts_from_tables.js"></script>
+<script type="text/javascript" src="/assets/js/app.js"></script>
+<script type="text/javascript" src="/assets/js/jquery-ui-1.10.3.custom.min.js"></script>
 
 </body>
 </html>
