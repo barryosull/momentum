@@ -43,6 +43,17 @@
 			    	<div class="slider minutes"></div>
 			    </div>
 			</div>
+			<?if ($most_recent_periodoftime): ?>
+				<div class="control-group">
+				    <label class="control-label" for="minutes">Last time added:</label>
+				    <div class="controls">
+				    	<?$project = $most_recent_periodoftime->project;?>
+				    	<?=$project->name?> 
+						<?=Model_TimeFormat::mins_to_string($most_recent_periodoftime->minutes)?>
+				    </div>
+				</div>
+			<? endif; ?>
+
 			<input type="hidden" name="date" value="<?=$day_date->format('Y-m-d')?>">
 			<div class="control-group">
    				<div class="controls">
