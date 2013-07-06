@@ -18,7 +18,11 @@
 			    <div class="controls">
 			    	<select id="project_id" name="project_id">
 						<?foreach($projects as $project):?>
-							<option value="<?=$project->id?>"><?=$project->name?></option>
+							<option value="<?=$project->id?>"
+								<?if($most_recent_periodoftime && $most_recent_periodoftime->project == $project):?>
+									selected="selected"
+								<?endif;?>
+							><?=$project->name?></option>
 						<?endforeach;?>
 					</select>
 			    </div>

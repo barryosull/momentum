@@ -168,10 +168,10 @@ class Model_Member extends \Orm\Model
 
 	private function check_project_is_accessible($project)
 	{
-		if(!$project){
+		if (!$project) {
 			throw new Model_MemberProjectNotFoundException("Project does not exist");
 		}
-		if($project->member_id != $this->id){
+		if ($project->member_id != $this->id) {
 			throw new Model_MemberProjectMismatchException("Project does not belong to member");
 		}
 	}
@@ -191,13 +191,27 @@ class Model_Member extends \Orm\Model
 
 	private function check_periodoftime_is_accessible($time)
 	{
-		if(!$time){
+		if (!$time) {
 			throw new Model_MemberPeriodoftimeNotFoundException("PeriodOfTime could not be found");
 		}
 		$project = $time->project;
 
-		if(!$project || $project->member_id != $this->id){
+		if (!$project || $project->member_id != $this->id) {
 			throw new Model_MemberPeriodoftimeMismatchException("PeriodOfTime does not belong to member");
 		}
 	}
+
+	public function get_most_recent_periodoftime()
+	{
+		$periodoftime = Model_PeriodOfTime::query()
+			->related('project')
+			->related('project.member')
+			->where('project.member.id', $this->id)
+			->order_by('id', 'desc')
+  			->get_one();
+
+  		if ($periodoftime) {
+  			return $periodoftime;
+  		}
+  	}
 }

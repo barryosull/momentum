@@ -360,6 +360,44 @@ class Tests_Member extends \Fuel\Core\TestCase
 		$this->assertEquals($time->id, $time_again->id);
 	}
 
+	public function test_get_most_recent_periodoftime()
+	{
+		$project = Model_Project::init(array(
+			'name'=>'project'
+		));
+		$time = Model_PeriodOfTime::init(array(
+			'minutes' => 20
+		));
+		$project->add_periodoftime($time);
+		$this->member->add_project($project);
+
+		$projectb = Model_Project::init(array(
+			'name'=>'projectb'
+		));
+		$timeb = Model_PeriodOfTime::init(array(
+			'minutes' => 20
+		));
+		$projectb->add_periodoftime($timeb);
+		$this->member->add_project($projectb);
+
+		$last_entered = $this->member->get_most_recent_periodoftime();
+
+		$this->assertEquals($timeb->id, $last_entered->id);
+	}
+
+
+	public function get_most_recent_periodoftime_returns_null_when_member_has_no_times()
+	{
+		$project = Model_Project::init(array(
+			'name'=>'project'
+		));
+		$this->member->add_project($project);
+
+		$last_entered = $this->member->get_most_recent_periodoftime();
+
+		$this->assertNull($last_entered);
+	}
+
 	/**
 	 * @expectedException Model_MemberPeriodoftimeMismatchException
 	 * @expectedExceptionMessage PeriodOfTime does not belong to member
