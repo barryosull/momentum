@@ -12,6 +12,9 @@ class Model_Project extends \Orm\Model
 		),
 		'created_at',
 		'updated_at',
+		'is_active' => array(
+			'default' => 1
+		),
 	);
 
 	protected static $_belongs_to = array(
@@ -89,5 +92,22 @@ class Model_Project extends \Orm\Model
 	public function _event_before_delete()
 	{
 		$this->member->remove_project($this);
+	}
+
+	public function activate()
+	{
+		$this->is_active = 1;
+		$this->save();
+	}
+
+	public function deactivate()
+	{
+		$this->is_active = 0;
+		$this->save();
+	}
+
+	public function is_active()
+	{
+		return (bool)$this->is_active;
 	}
 }

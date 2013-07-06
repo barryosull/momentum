@@ -22,3 +22,7 @@ input {
 	display: inline-block;
 	margin-left: 10px;
 }
+
+tr.is_deactivated td{
+    background-color: #eee;
+}

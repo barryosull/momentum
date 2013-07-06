@@ -41,7 +41,7 @@ class Controller_Periodoftime extends BaseController_Loggedin
 		$this->template->body = View::forge('periodoftime/add', array(
 			'todays_date' => new DateTime('today'),
 			'day_date' => $date,
-			'projects' => $this->member->get_all_projects()
+			'projects' => $this->member->get_active_projects()
 		));
 	}
 

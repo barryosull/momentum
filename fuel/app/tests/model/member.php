@@ -182,6 +182,7 @@ class Tests_Member extends \Fuel\Core\TestCase
 		));
 		$this->member->add_project($projecta);
 		$this->member->add_project($projectb);
+		$projecta->deactivate();
 
 		$projects = $this->member->get_all_projects();
 		$first = current($projects);
@@ -189,6 +190,26 @@ class Tests_Member extends \Fuel\Core\TestCase
 
 		$this->assertEquals('Project name', $first->name);
 		$this->assertEquals('Project name2', $second->name);
+	}
+	
+	public function test_get_active_projects_only_returns_active_projects()
+	{
+		$projecta = Model_Project::init(array(
+			'name' => 'Project name2'
+		));
+		$projectb = Model_Project::init(array(
+			'name' => 'Project name'
+		));
+		$this->member->add_project($projecta);
+		$this->member->add_project($projectb);
+
+		$projecta->deactivate();
+
+		$projects = $this->member->get_active_projects();
+		$first = current($projects);
+
+		$this->assertEquals('Project name', $first->name);
+		$this->assertEquals(1, count($projects));
 	}
 	
 	public function test_get_all_period_of_time_by_date_returns_period_of_time()

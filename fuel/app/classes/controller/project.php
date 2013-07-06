@@ -63,4 +63,18 @@ class Controller_Project extends BaseController_Loggedin
 		);
 		$this->template->body = View::forge('project/timetotals', $data);
 	}
+
+	public function action_activate($id)
+	{
+		$project = $this->member->get_project_by_id($id);
+		$project->activate();
+		Response::redirect('/project/view');
+	}
+
+	public function action_deactivate($id)
+	{
+		$project = $this->member->get_project_by_id($id);
+		$project->deactivate();
+		Response::redirect('/project/view');
+	}
 }

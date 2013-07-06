@@ -116,13 +116,24 @@ class Model_Member extends \Orm\Model
 
 	private function sort_project_alphabetically($projects)
 	{
-		$projects = array();
-		foreach($this->project as $project){
-			$projects[$project->name] = $project;
+		$sorted_projects = array();
+		foreach($projects as $project){
+			$sorted_projects[$project->name] = $project;
 		}
-		ksort($projects);
+		ksort($sorted_projects);
 
-		return $projects;
+		return $sorted_projects;
+	}
+
+	public function get_active_projects()
+	{
+		$active_projects = array();
+		foreach ($this->project as $project) {
+			if ($project->is_active()) {
+				$active_projects[] = $project;
+			}
+		}
+		return $active_projects;
 	}
 
 	public function get_all_period_of_time_by_date(DateTime $date)
