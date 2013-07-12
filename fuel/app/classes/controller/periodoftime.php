@@ -2,13 +2,21 @@
 
 class Controller_Periodoftime extends BaseController_Loggedin
 {
+	protected $projects;
+
+	public function before()
+	{
+		self::before();
+		$this->projects = $this->member->get_projects();
+	}
+
 	public function action_view($date_string = '')
 	{
 		$this->redirect_if_no_projects();
 
 		$date = $this->create_date_from_user_input($date_string);
 
-		$times = $this->member->get_all_period_of_time_by_date($date);
+		$times = $this->member->get_periodoftimes_by_date($date);
 
 		$this->template->body = View::forge('periodoftime/view', array(
 			'todays_date' => new DateTime('today'),

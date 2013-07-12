@@ -46,7 +46,7 @@ class Model_ProjectCollection
         return $project;
     }
 
-    public function get_all_periodoftime_by_date(DateTime $date)
+    public function get_periodoftimes_by_date(DateTime $date)
     {
         $timestamp = $date->getTimestamp();
         $day_after_timestamp = $timestamp + 86400;
