@@ -13,6 +13,7 @@ class Tests_ProjectCollection extends \Fuel\Core\TestCase
     public function setUp()
     {
         Model_Project::find()->delete();
+        Model_PeriodOfTime::find()->delete();
 
         $this->projecta = Model_Project::init(array(
             'name' => 'Project a'
@@ -136,5 +137,60 @@ class Tests_ProjectCollection extends \Fuel\Core\TestCase
     public function test_cant_get_project_that_doesnt_belong()
     {
         $this->collection->get_by_id($this->projecta->id);
+    }
+
+    public function test_get_all_period_of_time_by_date_doesnt_break_when_project_is_deleted()
+    {
+        $this->collection->add($this->projecta);
+
+        $this->projecta->delete();
+
+        $datetime = new DateTime();
+        $date = new DateTime($datetime->format('Y-m-d'));
+
+        $times = $this->collection->get_all_periodoftime_by_date($date);
+        
+        $this->assertEquals(0, count($times));
+    }
+
+    public function test_get_most_recent_periodoftime()
+    {
+        $this->collection->add($this->projecta);
+        $this->collection->add($this->projectb);
+
+        $timeb = Model_PeriodOfTime::init(array(
+            'minutes' => 20
+        ));
+        $this->projecta->add_periodoftime($timeb);
+
+        $last_entered = $this->collection->get_most_recent_periodoftime();
+
+        $this->assertEquals($timeb->id, $last_entered->id);
+    }
+
+
+    public function get_most_recent_periodoftime_returns_null_when_member_has_no_times()
+    {
+        $last_entered = $this->collection->get_most_recent_periodoftime();
+
+        $this->assertNull($last_entered);
+    }
+
+    public function test_get_periodoftime_by_id()
+    {
+        $this->collection->add($this->projecta);
+        
+        $time_again = $this->collection->get_periodotime_by_id($this->time->id);
+
+        $this->assertEquals($this->time->id, $time_again->id);
+    }
+
+    /**
+     * @expectedException Model_ProjectCollectionException
+     * @expectedExceptionMessage PeriodOfTime does not exist in collection
+     */
+    public function test_cant_get_nonexistant_periodoftime()
+    {   
+        $time = $this->collection->get_periodotime_by_id(123);
     }
 }

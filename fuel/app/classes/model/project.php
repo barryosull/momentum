@@ -35,10 +35,7 @@ class Model_Project extends \Orm\Model
 		'Orm\Observer_UpdatedAt' => array(
 			'events' => array('before_update'),
 			'mysql_timestamp' => false,
-		),
-		'Orm\\Observer_Self' => array(
-    		'events' => array('before_delete')
-    	)
+		)
 	);
 	
 	public static function init($params)
@@ -87,11 +84,6 @@ class Model_Project extends \Orm\Model
 		}
 
 		return $total;
-	}
-
-	public function _event_before_delete()
-	{
-		$this->member->remove_project($this);
 	}
 
 	public function activate()

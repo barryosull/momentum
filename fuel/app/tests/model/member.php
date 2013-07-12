@@ -11,8 +11,6 @@ class Tests_Member extends \Fuel\Core\TestCase
 	{
 		Model_Member::find()->delete();
 		Model_User::find()->delete();
-		Model_Project::find()->delete();
-		Model_PeriodOfTime::find()->delete();
 
 		$this->member = Model_Member::init(array(
 			'name'=>'name',
@@ -114,113 +112,25 @@ class Tests_Member extends \Fuel\Core\TestCase
 		);
 	}
 
-	public function test_remove_project()
+	public function test_get_projects_returns_collection()
 	{
+		$projects = $this->member->get_projects();
+
+		$this->assertEquals('Model_ProjectCollection', get_class($projects));
+	}
+
+	public function test_projectcollection_is_configured_correctly()
+	{
+		$projects = $this->member->get_projects();
 		$project = Model_Project::init(array(
-			'name'=>'project'
+			'name' => 'Project Name'
 		));
-		$this->member->add_project($project);
-		
-		$this->member->remove_project($project);
-		
-		$projects = $this->member->get_all_projects();
-		$this->assertEquals(0, count($projects));
-	}
+		$project->member_id = $this->member->id;
+		$project->save();
 
-	public function test_get_all_period_of_time_by_date_doesnt_break_when_project_is_deleted()
-	{
-		$project = Model_Project::init(array(
-			'name'=>'project'
-		));
-		$time = Model_PeriodOfTime::init(array(
-			'minutes' => 20
-		));
-		$project->add_periodoftime($time);
-		$this->member->add_project($project);
-
-		$project->delete();
-
-		$datetime = new DateTime();
-		$date = new DateTime($datetime->format('Y-m-d'));
-
-		$times = $this->member->get_all_period_of_time_by_date($date);
-		
-		$this->assertEquals(0, count($times));
-	}
-
-	public function test_get_periodoftime_by_id()
-	{
-		$project = Model_Project::init(array(
-			'name'=>'project'
-		));
-		$time = Model_PeriodOfTime::init(array(
-			'minutes' => 20
-		));
-		$project->add_periodoftime($time);
-		$this->member->add_project($project);
-		
-		$time_again = $this->member->get_periodotime_by_id($time->id);
-
-		$this->assertEquals($time->id, $time_again->id);
-	}
-
-	public function test_get_most_recent_periodoftime()
-	{
-		$project = Model_Project::init(array(
-			'name'=>'project'
-		));
-		$time = Model_PeriodOfTime::init(array(
-			'minutes' => 20
-		));
-		$project->add_periodoftime($time);
-		$this->member->add_project($project);
-
-		$projectb = Model_Project::init(array(
-			'name'=>'projectb'
-		));
-		$timeb = Model_PeriodOfTime::init(array(
-			'minutes' => 20
-		));
-		$projectb->add_periodoftime($timeb);
-		$this->member->add_project($projectb);
-
-		$last_entered = $this->member->get_most_recent_periodoftime();
-
-		$this->assertEquals($timeb->id, $last_entered->id);
-	}
-
-
-	public function get_most_recent_periodoftime_returns_null_when_member_has_no_times()
-	{
-		$project = Model_Project::init(array(
-			'name'=>'project'
-		));
-		$this->member->add_project($project);
-
-		$last_entered = $this->member->get_most_recent_periodoftime();
-
-		$this->assertNull($last_entered);
-	}
-
-	/**
-	 * @expectedException Model_MemberPeriodoftimeMismatchException
-	 * @expectedExceptionMessage PeriodOfTime does not belong to member
-	 */
-	public function test_cant_get_periodoftime_for_another_period_of_time()
-	{
-		$time = Model_PeriodOfTime::init(array(
-			'minutes' => 20
-		));
-		
-		$time_again = $this->member->get_periodotime_by_id($time->id);
-	}
-
-	/**
-	 * @expectedException Model_MemberPeriodoftimeNotFoundException
-	 * @expectedExceptionMessage PeriodOfTime could not be found
-	 */
-	public function test_cant_get_nonexistant_periodoftime()
-	{	
-		$time = $this->member->get_periodotime_by_id(123);
+		$this->assertEquals(
+			$project->id, 
+			$projects->get_by_id($project->id)->id
+		);
 	}
 }

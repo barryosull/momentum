@@ -37,6 +37,15 @@ class Model_ProjectCollection
         return $this->query()->where('is_active', 1)->get();
     }
 
+    public function get_by_id($id)
+    {
+        $project = $this->query()->where('id', $id)->get_one();
+        if (! $project) {
+            throw new Model_ProjectCollectionException("Project does not exist in collection");
+        }
+        return $project;
+    }
+
     public function get_all_periodoftime_by_date(DateTime $date)
     {
         $timestamp = $date->getTimestamp();
@@ -50,12 +59,28 @@ class Model_ProjectCollection
             ->get();
     }
 
-    public function get_by_id($id)
+    public function get_most_recent_periodoftime()
     {
-        $project = $this->query()->where('id', $id)->get_one();
-        if (! $project) {
-            throw new Model_ProjectCollectionException("Project does not exist in collection");
+        return Model_PeriodOfTime::query()
+            ->related('project')
+            ->where('project.member_id', $this->member_id)
+            ->order_by('id', 'desc')
+            ->get_one();
+    }
+
+    public function get_periodotime_by_id($id)
+    {
+        $time = Model_PeriodOfTime::query()
+            ->where('id', $id)
+            ->related('project')
+            ->where('project.member_id', $this->member_id)
+            ->order_by('id', 'desc')
+            ->get_one();
+
+        if (!$time) {
+            throw new Model_ProjectCollectionException("PeriodOfTime does not exist in collection");
         }
-        return $project;
+
+        return $time;
     }
 }
