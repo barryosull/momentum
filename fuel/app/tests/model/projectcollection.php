@@ -72,14 +72,22 @@ class Tests_ProjectCollection extends \Fuel\Core\TestCase
     public function test_get_all_projects_returns_alphabetical()
     {
         $this->collection->add($this->projectb);
-        $this->collection->add($this->projecta);
+        $this->collection->add($this->projecta);  
+        $this->collection->add(
+            Model_Project::init(array(
+                'name' => 'Android'
+            ))
+        );
+        
 
         $projects = $this->collection->get_all();
         $first = current($projects);
         $second = next($projects);
-
-        $this->assertEquals('Project a', $first->name);
-        $this->assertEquals('Project b', $second->name);
+        $third = next($projects);
+        
+        $this->assertEquals('Android', $first->name);
+        $this->assertEquals('Project a', $second->name);
+        $this->assertEquals('Project b', $third->name);
     }
     
     public function test_get_active_projects_only_returns_active_projects()
@@ -92,6 +100,25 @@ class Tests_ProjectCollection extends \Fuel\Core\TestCase
 
         $this->assertEquals('Project a', $first->name);
         $this->assertEquals(1, count($projects));
+    }
+
+    public function test_get_active_projects_returns_alphabetical()
+    {
+        
+        $this->collection->add($this->projectb);
+        $this->collection->add($this->projecta); 
+        $this->collection->add(
+            Model_Project::init(array(
+                'name' => 'Android'
+            ))
+        );
+    
+        $projects = $this->collection->get_active();
+        $first = current($projects);
+        $second = next($projects);    
+        
+        $this->assertEquals('Android', $first->name);
+        $this->assertEquals('Project a', $second->name);
     }
 
     public function test_get_all_periodoftime_by_date_returns_period_of_time()

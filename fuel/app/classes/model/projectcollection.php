@@ -29,12 +29,17 @@ class Model_ProjectCollection
 
     public function get_all()
     {
-        return $this->query()->get();
+        return $this->query()
+            ->order_by('name', 'asc')
+            ->get();
     }
 
     public function get_active()
     {
-        return $this->query()->where('is_active', 1)->get();
+        return $this->query()
+            ->where('is_active', 1)
+            ->order_by('name', 'asc')
+            ->get();
     }
 
     public function get_by_id($id)
