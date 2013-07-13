@@ -2,9 +2,17 @@
 
 class Controller_Project extends BaseController_Loggedin
 {
+	protected $projects;
+
+	public function before()
+	{
+		parent::before();
+		$this->projects = $this->member->get_projects();
+	}
+
 	public function action_view()
 	{
-		$projects = $this->member->get_all_projects();
+		$projects = $this->projects->get_all();
 		$this->template->body = View::forge('project/view', array(
 			'projects' => $projects
 		));
@@ -21,8 +29,8 @@ class Controller_Project extends BaseController_Loggedin
 			$project = Model_Project::init(array(
 				'name' => Input::post('name')
 			));
-			$this->member->add_project($project);
-		}catch(Model_MemberException $e){
+			$this->projects->add($project);
+		}catch(Exception_Input $e){
 			Session::set_flash('error', $e->getMessage());
 			Response::redirect('/project/add');
 		}
@@ -32,7 +40,7 @@ class Controller_Project extends BaseController_Loggedin
 
 	public function action_delete($id)
 	{
-		$project = $this->member->get_project_by_id($id);
+		$project = $this->projects->get_by_id($id);
 		$project->delete();
 		Response::redirect('/project/view');
 	}
@@ -55,7 +63,7 @@ class Controller_Project extends BaseController_Loggedin
 		$next_week_start->modify('+7 days');
 
 		$data = array(
-			'projects'=>$this->member->get_all_projects(),
+			'projects'=>$this->projects->get_all(),
 			'week_start'=>$week_start,
 			'week_end'=>$week_end,
 			'last_week_start'=>$last_week_start,
@@ -66,14 +74,14 @@ class Controller_Project extends BaseController_Loggedin
 
 	public function action_activate($id)
 	{
-		$project = $this->member->get_project_by_id($id);
+		$project = $this->projects->get_by_id($id);
 		$project->activate();
 		Response::redirect('/project/view');
 	}
 
 	public function action_deactivate($id)
 	{
-		$project = $this->member->get_project_by_id($id);
+		$project = $this->projects->get_by_id($id);
 		$project->deactivate();
 		Response::redirect('/project/view');
 	}

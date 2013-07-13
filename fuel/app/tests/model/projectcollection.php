@@ -101,7 +101,7 @@ class Tests_ProjectCollection extends \Fuel\Core\TestCase
         $datetime = new DateTime();
         $date = new DateTime($datetime->format('Y-m-d'));
 
-        $times = $this->collection->get_all_periodoftime_by_date($date);
+        $times = $this->collection->get_periodoftimes_by_date($date);
         
         $time_again = current($times);
         $this->assertEquals($this->time->id, $time_again->id);
@@ -116,7 +116,7 @@ class Tests_ProjectCollection extends \Fuel\Core\TestCase
     
         $date = new DateTime('today');
 
-        $times = $this->collection->get_all_periodoftime_by_date($date);
+        $times = $this->collection->get_periodoftimes_by_date($date);
 
         $this->assertEquals(0, count($times));
     }
@@ -148,7 +148,7 @@ class Tests_ProjectCollection extends \Fuel\Core\TestCase
         $datetime = new DateTime();
         $date = new DateTime($datetime->format('Y-m-d'));
 
-        $times = $this->collection->get_all_periodoftime_by_date($date);
+        $times = $this->collection->get_periodoftimes_by_date($date);
         
         $this->assertEquals(0, count($times));
     }

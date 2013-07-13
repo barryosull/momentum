@@ -51,7 +51,7 @@ class Tests_PeriodOfTime extends \Fuel\Core\TestCase
 	}
 
 	/**
-	 * @expectedException Model_PeriodOfTimeException
+	 * @expectedException Exception_Input
 	 */
 	public function test_minutes_cant_be_less_than_zero()
 	{
@@ -61,7 +61,7 @@ class Tests_PeriodOfTime extends \Fuel\Core\TestCase
 	}
 
 	/**
-	 * @expectedException Model_PeriodOfTimeException
+	 * @expectedException Exception_Input
 	 */
 	public function test_minutes_cant_be_zero()
 	{

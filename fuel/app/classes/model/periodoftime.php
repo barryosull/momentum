@@ -40,7 +40,7 @@ class Model_PeriodOfTime extends \Orm\Model
 	private static function check_init_params($params)
 	{
 		if((int)$params['minutes'] < 1){
-			throw new Model_PeriodOfTimeException("Minutes field must be greater than 0, '".(int)$params['minutes']."' was entered");
+			throw new Exception_Input("Minutes field must be greater than 0, '".(int)$params['minutes']."' was entered");
 		}
 	}
 

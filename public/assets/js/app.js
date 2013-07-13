@@ -30,3 +30,21 @@ function askIfOkToDelete(e)
 		return e.preventDefault();
 	}
 }
+
+Helpers = {};
+Helpers.Time = {};
+Helpers.Time.mins_to_string = function(mins)
+{
+	mins = new Number(mins);
+	mins = Math.floor(mins);
+	var hours = Math.floor(mins/60);
+	var mins_remainder = (mins%60);
+
+	if(hours == 0){
+		return mins_remainder+'mins';
+	}
+	if(mins_remainder == 0){
+		return hours+'hr';
+	}
+	return hours+'hr '+mins_remainder+'mins';
+}
