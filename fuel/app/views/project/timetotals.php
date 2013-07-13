@@ -18,7 +18,10 @@
 			<thead>
 				<th>Times</th>
 				<?foreach($projects as $project):?>
-					<th><?=$project->name?></th>
+					<?$total_time = $project->get_totaltime_for_date_range($week_start, $week_end);
+					if ($total_time > 0): ?> 
+						<th><?=$project->name?></th>
+					<?endif;?>
 				<?endforeach;?>
 			</thead>
 			<tbody>
@@ -30,7 +33,10 @@
 						?>
 						<th><?=$day->format('D')?></th>
 						<?foreach($projects as $project):?>
-							<td><?=$project->get_totaltime_for_date_range($day, $next_day)?></td>
+							<?$total_time = $project->get_totaltime_for_date_range($week_start, $week_end);
+								if ($total_time > 0): ?> 
+								<td><?=$project->get_totaltime_for_date_range($day, $next_day)?></td>
+							<?endif;?>
 						<?endforeach;?>
 					</tr>
 				<?endfor;?>
