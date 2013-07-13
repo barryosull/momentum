@@ -11,14 +11,25 @@
 					$todays_date->getTimestamp()
 				)?>)
 			<?endif?>
-		</h3> 
+		</h3>
+		<?if ($most_recent_periodoftime): ?>
+			<b>Last time added:</b>
+			<?=$most_recent_periodoftime->project->name?> 
+			(<?=Model_TimeFormat::mins_to_string($most_recent_periodoftime->minutes)?>)
+			</br>	
+		<? endif; ?>
+		</br>
 		<form class="form-horizontal" action="/periodoftime/add_post" method="post">
 			<div class="control-group">
 			    <label class="control-label" for="project_id">Project:</label>
 			    <div class="controls">
 			    	<select id="project_id" name="project_id">
 						<?foreach($projects as $project):?>
-							<option value="<?=$project->id?>"><?=$project->name?></option>
+							<option value="<?=$project->id?>"
+								<?if($most_recent_periodoftime && $most_recent_periodoftime->project == $project):?>
+									selected="selected"
+								<?endif;?>
+							><?=$project->name?></option>
 						<?endforeach;?>
 					</select>
 			    </div>
@@ -39,6 +50,8 @@
 			    	<div class="slider minutes"></div>
 			    </div>
 			</div>
+			
+
 			<input type="hidden" name="date" value="<?=$day_date->format('Y-m-d')?>">
 			<div class="control-group">
    				<div class="controls">

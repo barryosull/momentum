@@ -1,9 +1,9 @@
 (function(){
 
-	function render_table_chart($table, type)
+	function render_table_chart($table)
 	{
    		units = $table.find('th:first').text();
-   		var  options = get_default_chart_options_for(type);
+   		var  options = get_default_chart_options();
 	  
 	  	options.chart.renderTo = $table.attr('data-chart-id');
 	    options.yAxis.title.text = units;
@@ -11,63 +11,51 @@
     	Highcharts.render_table($table, options);
 	}
 
-	function get_default_chart_options_for(type)
+	function get_default_chart_options()
 	{
 		var default_options = {
 	        chart: {
-	            type: ''
+	            type: 'column'
 	        },
-	        title: {
-	            text: ''
-	        },
-	        xAxis: {
-	        },
-	        yAxis: {
-	            title: {
-	                text: ''
-	            }
-	        },
-	        tooltip: {
-	            formatter: function() {
-	                return '<b>'+ this.series.name +'</b><br/>'+
-	                    this.y +' ('+ this.x+')';
-	            }
-	        }
-	    };
-
-		if(type=='column'){
-			default_options.chart.type = type;
-		}else if(type=='line'){
-			default_options.chart.type = type;
-		}else if(type=='stacked'){
-			default_options.chart.type = 'column';
-			default_options.plotOptions = {
+            plotOptions: {
                 column: {
                     stacking: 'normal'
                 }
-            };
-		}else{
-			return alert('Chart type of "'+type+'" is unknown');
-		}
-
+            },
+	        title: {
+	            text: ''
+	        },
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                        Helpers.Time.mins_to_string(this.y)
+                         +' ('+ this.x+')';
+                }
+            },
+	        xAxis: {},
+	        yAxis: {
+                labels: {
+                    formatter: function() {
+                        var text = Helpers.Time.mins_to_string(this.value);
+                        if (text == '0mins') {
+                            return '';
+                        }
+                        return text;
+                   }
+                },
+                tickInterval: 120,  
+	            title: {
+	                text: ''
+	            }
+	        }
+	    };
 		return default_options;
 	}
 
 	$(function()
 	{
-	   	$('table.view_as_bar_chart').each(function() 
-	   	{
-	   		render_table_chart($(this), 'column');	
-	    }); 
-
-	    $('table.view_as_line_chart').each(function() 
-	   	{ 
-	   		render_table_chart($(this), 'line');	
-	    });
-
-	    $('table.view_as_stacked_bar_chart').each(function() 
-	   	{
-	   		render_table_chart($(this), 'stacked');	
+	    $('table.view_as_stacked_bar_chart').each(function() {
+	   		render_table_chart($(this));	
 	    }); 
 	});
 

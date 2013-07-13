@@ -11,6 +11,7 @@ return array(
 				2 => '003_create_users',
 				3 => '004_create_members',
 				4 => '005_create_member_relation_fields',
+				5 => '006_create_project_active_field',
 			),
 		),
 		'module' => 

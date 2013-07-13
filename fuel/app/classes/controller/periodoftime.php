@@ -2,13 +2,21 @@
 
 class Controller_Periodoftime extends BaseController_Loggedin
 {
+	protected $projects;
+
+	public function before()
+	{
+		parent::before();
+		$this->projects = $this->member->get_projects();
+	}
+
 	public function action_view($date_string = '')
 	{
 		$this->redirect_if_no_projects();
 
 		$date = $this->create_date_from_user_input($date_string);
 
-		$times = $this->member->get_all_period_of_time_by_date($date);
+		$times = $this->projects->get_periodoftimes_by_date($date);
 
 		$this->template->body = View::forge('periodoftime/view', array(
 			'todays_date' => new DateTime('today'),
@@ -19,7 +27,7 @@ class Controller_Periodoftime extends BaseController_Loggedin
 
 	private function redirect_if_no_projects()
 	{
-		$projects = $this->member->get_all_projects();
+		$projects = $this->projects->get_all();
 		if(count($projects) == 0){
 			Session::set_flash('message', "Looks like you haven't added any projects. Please add a project to start");
 			Response::redirect('/project/add');
@@ -40,14 +48,15 @@ class Controller_Periodoftime extends BaseController_Loggedin
 
 		$this->template->body = View::forge('periodoftime/add', array(
 			'todays_date' => new DateTime('today'),
+			'most_recent_periodoftime' => $this->projects->get_most_recent_periodoftime(),
 			'day_date' => $date,
-			'projects' => $this->member->get_all_projects()
+			'projects' => $this->projects->get_active()
 		));
 	}
 
 	public function action_add_post()
 	{
-		$project = $this->member->get_project_by_id(Input::post('project_id'));
+		$project = $this->projects->get_by_id(Input::post('project_id'));
 		$minutes = Input::post('minutes');
 		$hours = Input::post('hours');
 		$date = $this->create_date_from_user_input(Input::post('date'));
@@ -61,7 +70,7 @@ class Controller_Periodoftime extends BaseController_Loggedin
 			));
 			$project->add_periodoftime($time);
 
-		}catch(Model_PeriodOfTimeException $e){
+		}catch(Exception_Input $e){
 			Session::set_flash('error', $e->getMessage());
 			Response::redirect('/periodoftime/add/'.$date->format('Y-m-d'));
 		}
@@ -71,7 +80,7 @@ class Controller_Periodoftime extends BaseController_Loggedin
 
 	public function action_delete($id)
 	{
-		$time = $this->member->get_periodotime_by_id($id);
+		$time = $this->projects->get_periodotime_by_id($id);
 		$time->delete();
 		Response::redirect('/periodoftime/view');
 	}
